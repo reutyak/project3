@@ -18,7 +18,7 @@ admin_router.post("/", async (request: Request, response: Response, next: NextFu
 })
 
 // delete admin from DB
-admin_router.delete("/:id", async (request: Request, response: Response, next: NextFunction) => {
+admin_router.delete("/delete/:id", async (request: Request, response: Response, next: NextFunction) => {
   const someData = +request.params.id;
   response.status(204).json( await admin_logic.deleteAdmin(someData))
 })
@@ -34,7 +34,7 @@ admin_router.get("/vacation/all", async (request: Request, response: Response, n
   response.status(200).json( await admin_logic.getAllVacations())
 })
 //get single vacation- not necessary
-admin_router.get("/vacation/:id", async (request: Request, response: Response, next: NextFunction) => {
+admin_router.get("/vacation/single/:id", async (request: Request, response: Response, next: NextFunction) => {
   const someData = +request.params.id;
   response.status(200).json( await admin_logic.getSingleVacation(someData))
 })

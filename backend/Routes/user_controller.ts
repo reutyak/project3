@@ -10,7 +10,7 @@ user_router.get("/all", async (request: Request, response: Response, next: NextF
   response.status(200).json( await user_logic.getAllUsers())
 })
 
-user_router.get("/:id", async (request: Request, response: Response, next: NextFunction) => {
+user_router.get("/single/:id", async (request: Request, response: Response, next: NextFunction) => {
   const someData = +request.params.id;
   response.status(200).json( await user_logic.getSingleUser(someData))
 })
