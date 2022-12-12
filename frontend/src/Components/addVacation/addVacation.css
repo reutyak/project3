@@ -1,0 +1,22 @@
+.addVacation {
+    height: 100%;
+    background-color: white;
+    box-sizing: border-box; /*fix bug in browsers*/
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 10% 90% ;
+    /* border: 1px solid black; */
+	}
+      
+.addVacation >header{
+  background-color: dodgerblue;
+  grid-column:span 6;
+  height: 100%;
+}
+
+.addVacation >main{
+  grid-column:span 6;
+  height: 100%;
+  /* padding: 2%; */
+  margin-right: 0%;
+}

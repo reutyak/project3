@@ -1,0 +1,13 @@
+.MenuAdmin {
+	text-align:center;
+}
+
+.MenuAdmin > div {
+    display: inline-block;
+    display: -moz-inline-box;
+    *display: inline; /* For IE7 */
+    zoom: 1; /* Trigger hasLayout */
+    width: 25%;
+    text-align: center;
+    margin-bottom: 2%;
+}

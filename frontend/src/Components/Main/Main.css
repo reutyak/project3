@@ -1,0 +1,23 @@
+.Main {
+    height: 100%;
+    background-color: white;
+    box-sizing: border-box; /* fix bug in browsers */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 20% 80% ;
+    border: 1px solid black;
+	}
+      
+.Main >header{
+  background-color: dodgerblue;
+  grid-column:span 6;
+  height: 100%;
+}
+
+.Main >main{
+  grid-column:span 6;
+  grid-row: 80% / 100%;
+  height: 100%;
+  padding: 0.1%;
+  margin-right: 0%;
+}
