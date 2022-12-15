@@ -4,6 +4,7 @@ import dal from "../Utils/dal_mysql"
 import { OkPacket } from "mysql";
 import User from "../Models/User";
 
+var hash = require('object-hash');
 
 // functions( async / await ) for getting data from DB
 const getAllUsers = async (): Promise<User> => {
@@ -32,9 +33,9 @@ const addUser = async (newUser: User): Promise<User> => {
     (DEFAULT,
     '${newUser.name}',
     '${newUser.last_name}',
-    '${newUser.user_name}',
-    '${newUser.password}',
-    '${newUser.followed_list}')
+    '${hash(newUser.user_name)}',
+    '${hash(newUser.password)}'
+    )
     `
     const response : OkPacket = await dal.execute(sql);
     newUser.id = response.insertId;

@@ -4,7 +4,7 @@ class User{
     last_name:string="";
     user_name:string="";
     password:string="";
-    followed_list:JSON | undefined;
+    // followed_list:JSON | undefined;
 }
 
 export default User;

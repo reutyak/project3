@@ -5,7 +5,7 @@ import { OkPacket } from "mysql";
 import Admin from "../Models/Admin";
 import Vacation from "../Models/Vacation";
 
-
+var hash = require('object-hash');
 
 // functions( async / await ) for getting data from DB
 const getAllAdmins = async (): Promise<Admin[]> => {
@@ -22,9 +22,9 @@ const addAdmin = async (newAdmin: Admin): Promise<Admin> => {
     const sql = `
     INSERT INTO admin VALUES 
     (DEFAULT, 
-    '${newAdmin.admin_name}',
-    '${newAdmin.admin_code}',
-    '${newAdmin.followed_vacations}');`;
+    '${hash(newAdmin.admin_name)}',
+    '${hash(newAdmin.admin_code)}'
+    );`;
     const response : OkPacket = await dal.execute(sql);
     newAdmin.id = response.insertId;
     return newAdmin;
@@ -42,9 +42,8 @@ const updateAdmin = async (admin: Admin): Promise<Admin> => {
     const sql = `
     UPDATE admin 
     SET 
-    admin_name='${admin.admin_name}',
-    admin_code='${admin.admin_code}',
-    followed_vacations='${admin.followed_vacations}'
+    admin_name='${hash(admin.admin_name)}',
+    admin_code='${hash(admin.admin_code)}',
     WHERE id = ${admin.id}
     `;
     await dal.execute(sql);

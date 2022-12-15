@@ -1,5 +1,5 @@
-.Login {
-	text-align: center;
+.Modal {
+	
 }
 
 .Box {
@@ -14,7 +14,7 @@
     margin-bottom: 5%;
   }
 
-.Login select {
+.Modal select {
     width: 40%;    
     margin-bottom: 1%;
     margin-left: 30%;
@@ -23,13 +23,13 @@
     display: block;
 }
 
-.Login div {
+.Modal div {
     text-align: center;
     margin-bottom: 1%;
 
 }
 
-.Login label,.Login input{
+.Modal label,.Modal input{
     width: 40%;    
     margin-bottom: 1%;
     margin-left: 30%;
@@ -39,7 +39,7 @@
 
 }
 
-.Login button{
+.Modal button{
     width: 40%;    
     margin-bottom: 1%;
     margin-left: 30%;
@@ -58,5 +58,3 @@
     display: block;
     text-align: center
 }
-
-

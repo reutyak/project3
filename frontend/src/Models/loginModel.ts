@@ -1,5 +1,5 @@
 export class LoginModel {
-    typeUser: string | undefined;
-   user_name: string | undefined;
-   password: string | undefined; 
+    typeUser: string ="user";
+   user_name: string ="";
+   password: string =""; 
 };

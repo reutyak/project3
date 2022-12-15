@@ -1,3 +1,61 @@
 .Register {
 	
 }
+
+
+.Box {
+    display:block   ;
+    text-align: center;
+    border: 2px solid black;
+    padding: 20px;
+    border-radius: 15px;
+    height: 500px;
+    width: 50%;
+    margin-left: 25%;
+    margin-bottom: 5%;
+  }
+
+.Register select {
+    width: 40%;    
+    margin-bottom: 1%;
+    margin-left: 30%;
+    box-sizing: border-box;
+    text-align: center;
+    display: block;
+}
+
+.Register div {
+    text-align: center;
+    margin-bottom: 1%;
+
+}
+
+.Register label,.Register input{
+    width: 40%;    
+    margin-bottom: 1%;
+    margin-left: 30%;
+    box-sizing: border-box;
+    text-align: center;
+    display: block;
+
+}
+
+.Register button{
+    width: 40%;    
+    margin-bottom: 1%;
+    margin-left: 30%;
+    box-sizing: border-box;
+    text-align: center;
+    display: block;
+
+}
+
+.Alert{
+    width: 40%;    
+    margin-bottom: 1%;
+    margin-left: 30%;
+    box-sizing: border-box;
+    text-align: center;
+    display: block;
+    text-align: center
+}
