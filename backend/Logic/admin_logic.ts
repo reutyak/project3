@@ -78,14 +78,14 @@ const addVacation = async (newVacation: Vacation): Promise<Vacation> => {
     '${newVacation.description}',
     '${newVacation.destination}',
     ${newVacation.price},
-    LOAD_FILE('${newVacation.vacation_img}'),
+    NULL,
     '${newVacation.start_date}',
     '${newVacation.end_date}',
-    ${newVacation.amountOfFollowers});`;
+    NULL);`;
     const response : OkPacket = await dal.execute(sql);
     newVacation.id = response.insertId;
     return newVacation;
-
+//LOAD_FILE('${newVacation.vacation_img}')
 } 
 
 const deleteVacation = async (id: number): Promise<void> => {
@@ -101,10 +101,10 @@ const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
     SET description='${vacation.description}',
     destination='${vacation.destination}',
     price=${vacation.price},
-    vacation_img=LOAD_FILE('${vacation.vacation_img}'),
+    vacation_img=NULL,
     start_date='${vacation.start_date}',
     end_date='${vacation.end_date}',
-    amountOfFollowers=${vacation.amountOfFollowers}
+    amountOfFollowers=NULL
     WHERE id = ${vacation.id}
     `;
     await dal.execute(sql);

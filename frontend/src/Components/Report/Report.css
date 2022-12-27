@@ -1,22 +1,36 @@
 .Report {
-    height: 100%;
-    background-color: white;
-    box-sizing: border-box; /*fix bug in browsers*/
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 10% 90% ;
-    /* border: 1px solid black; */
-	}
-      
-.Report >header{
-  background-color: dodgerblue;
-  grid-column:span 6;
   height: 100%;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  box-sizing: border-box; /*fix bug in browsers*/
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 10% 5% 85% ;
+  /* border: 1px solid black; */
+}
+    
+.Report >header{
+background-color: dodgerblue;
+grid-column:span 6;
+/* height: 100%; */
 }
 
 .Report >main{
-  grid-column:span 6;
-  height: 100%;
-  /* padding: 2%; */
-  margin-right: 0%;
+grid-column:span 6;
+height: 10%;
+/* padding: 2%; */
+margin-right: 0%;
+margin-bottom: 15%;
 }
+
+.bar{
+/* padding-left:10%;
+padding-right:10%; */
+font-weight: 900;
+
+}
+
+/* .chart{
+width: 150px;
+} */
