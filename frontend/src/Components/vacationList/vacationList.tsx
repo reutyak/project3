@@ -18,8 +18,8 @@ import { Pagination } from "@mui/material";
 
 function VacationList(): JSX.Element {
     const navigate= useNavigate();
-    const[vacations,setVacation]=useState<Vacation[]>([]);
-    const [loading, setLoading] = useState(false);
+    const[vacations,setVacations]=useState<Vacation[]>([]);
+    // const [loading, setLoading] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [cardsPerPage] = useState(10);
@@ -27,16 +27,27 @@ function VacationList(): JSX.Element {
     const pageCount = Math.ceil(vacations.length / 10);
     // const [page, setPage] = React.useState(1);
 
+    useEffect(()=>{
+        localStorage.setItem('vacations', JSON.stringify(vacations));
+    },[vacations]);
+
     //const itemsPerPage=10;
         useEffect(()=>{      
-            setLoading(true);
-
-
-            axios.get(`http://localhost:3003/admin/vacation/all`)
-            .then(response=>setVacation(response.data));
-            setLoading(false);
-
+            // setLoading(true);
+            let storageVacation = JSON.parse(localStorage.vacations);
+            console.log(storageVacation.length);
+            if(storageVacation.length > 0){
+             setVacations(storageVacation);
+            }else{
+                axios.get(`http://localhost:3003/admin/vacation/all`)
+                .then(response=>setVacations(response.data));
+                console.log("123");
+                console.log(vacations);
+            }
+            // setLoading(false);
         },[currentPage]);
+
+
 
         const sortedVacations=vacations.sort((objA,objB)=>new Date(objB.start_date).getTime()-new Date(objA.start_date).getTime());
         // Get currCards
@@ -52,7 +63,6 @@ function VacationList(): JSX.Element {
             setCurrentPage(value);
         };
 
-    
 
 
 
@@ -64,13 +74,13 @@ function VacationList(): JSX.Element {
                     <div className="card-container" key={item.id} style={{ height: 360, width:250 }}>
                         <p>{item.destination}</p>
                         <p>{item.price}&#36;</p>
-                        {/* <img className="image" src={item.vacation_img} style={{height:150}}/> */}
+                        <img className="image" src={item.vacation_img} style={{height:150}}/>
                         <p>{new Date(item.start_date).toISOString().slice(8,10)}/{new Date(item.start_date).toISOString().slice(5,7)}/{new Date(item.start_date).toISOString().slice(0,4)} - {new Date(item.end_date).toISOString().slice(8,10)}/{new Date(item.end_date).toISOString().slice(5,7)}/{new Date(item.end_date).toISOString().slice(0,4)}</p>
                         <p>{item.description}</p>
                         <div className="Buttons">
                             <IconButton className="btn" aria-label="delete"  color="error" size="large" onClick={()=>{
                                     axios.delete(`http://localhost:3003/admin/vacation/${item.id}`);
-                                    setVacation(vacations.filter(singleVacation=>singleVacation.id !== item.id));
+                                    setVacations(vacations.filter(singleVacation=>singleVacation.id !== item.id));
                                 }}>
                                 <DeleteIcon/>
                             </IconButton>

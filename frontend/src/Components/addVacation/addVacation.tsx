@@ -13,15 +13,24 @@ function AddVacation(): JSX.Element {
     const navigate = useNavigate();
     const params = useParams();
     const id = +(params.id || 0);
+    var storageVacation = JSON.parse(localStorage.vacations);
+    const [vacations, setVacations] = useState<Vacation[]>(storageVacation);
+
     // const handleFile = (f:any) => {
     //     f.preventDefault();
     //     setFile(f.target.files[0]);
     // }
 
+    useEffect(() => {
+        localStorage.setItem('vacations', JSON.stringify(vacations));
+      }, [vacations]);
+    
     useEffect(()=>{
         if (id > 0 ){
-            axios.get(`http://localhost:3003/admin/vacation/single/${params.id}`)
-            .then(response => setVacation(response.data[0]));
+            const myVacation = (vacations.filter(vacation => vacation.id === id));
+            setVacation(myVacation[0]);
+            // axios.get(`http://localhost:3003/admin/vacation/single/${params.id}`)
+            // .then(response => setVacation(response.data[0]));
         }
     },[]);
     
@@ -31,6 +40,10 @@ function AddVacation(): JSX.Element {
                 await axios.post("http://localhost:3003/admin/vacation/",newVacation,
                 )
                 .then(res=>{
+                    //update the localStorage
+                    storageVacation.push(newVacation);
+                    setVacations(storageVacation);
+                    localStorage.setItem("vacations", JSON.stringify(vacations));
                     console.log(newVacation);
                     navigate("/admin");
                 });
@@ -43,7 +56,14 @@ function AddVacation(): JSX.Element {
                 newVacation.start_date = newVacation.start_date || vacation?.start_date;
                 newVacation.end_date = newVacation.end_date || vacation?.end_date;
                 await axios.put("http://localhost:3003/admin/vacation/update", newVacation)
-                .then(res=>navigate("/admin"));
+                .then(res=>{
+                    //update the localStorage
+                    storageVacation = storageVacation.filter((vacation: { id: number; })=> (vacation.id !== id));
+                    storageVacation.push(newVacation);
+                    setVacations(storageVacation);
+                    localStorage.setItem("vacations", JSON.stringify(vacations));
+                    navigate("/admin")
+                });
             }
                 
         } catch (err: any) {

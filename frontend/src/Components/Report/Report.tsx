@@ -31,9 +31,19 @@ function Report(): JSX.Element {
     const [vacations, setVacations]=useState<Vacation[]>([]);
 
     useEffect(()=>{
-        
-        axios.get("http://localhost:3003/admin/vacation/all")
-        .then(response=>setVacations(response.data));
+        let storageVacation = JSON.parse(localStorage.vacations);
+        console.log(storageVacation.length);
+        if(storageVacation.length > 0)
+        {
+            setVacations(storageVacation);
+        }else{
+            axios.get(`http://localhost:3003/admin/vacation/all`)
+            .then(response=>setVacations(response.data));
+            console.log("123");
+            console.log(vacations);
+        }
+        // axios.get("http://localhost:3003/admin/vacation/all")
+        // .then(response=>setVacations(response.data));
         
     },[])
     

@@ -5,7 +5,7 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: 20% 80% ;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 	}
       
 .Main >header{
