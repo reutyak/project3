@@ -5,21 +5,35 @@ import { useNavigate, useParams } from "react-router-dom";
 import Vacation from "../../Models/Vacation";
 import MenuAdmin from "../MenuAdmin/MenuAdmin";
 import "./addVacation.css";
+import { fileURLToPath } from "url";
+import { Alert } from "@mui/material";
 
 function AddVacation(): JSX.Element {
     const { register, handleSubmit } = useForm<Vacation>();
     const [file, setFile] = useState("");
+    const [alert, setAlert] = useState<Boolean>(false);
+    // const [fileName, setFileName] = useState("");
     const [vacation, setVacation] = useState<Vacation>();
     const navigate = useNavigate();
     const params = useParams();
     const id = +(params.id || 0);
     var storageVacation = JSON.parse(localStorage.vacations);
     const [vacations, setVacations] = useState<Vacation[]>(storageVacation);
+    const alertOn = ()=>{
+        if (alert === true){
+            return <Alert variant="outlined" severity="error">Image size must be smaller than 530KB </Alert>
+        }
+    };
 
-    // const handleFile = (f:any) => {
-    //     f.preventDefault();
-    //     setFile(f.target.files[0]);
-    // }
+    function handleChange(e:any) {
+        // console.log(e.target.name);
+        // console.log((e.target.files[0]));
+        // setFile(URL.createObjectURL(e.target.files[0]));
+            // setFile(e.target.files[0]);
+            // setFileName(e.target.files[0].name);
+    }
+
+    
 
     useEffect(() => {
         localStorage.setItem('vacations', JSON.stringify(vacations));
@@ -33,10 +47,54 @@ function AddVacation(): JSX.Element {
             // .then(response => setVacation(response.data[0]));
         }
     },[]);
+
+    //convert a file to string
+    const getBase64 = (file: any): Promise<any> => {
+        return new Promise<any>((resolve, reject) => {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                console.log(reader.result);
+                resolve(reader.result?.toString());
+            };
+            reader.onerror = function (error) {
+               reject(error);
+            };
+        })
+    }
     
     const send = async (newVacation: Vacation) => {
+        if(newVacation.vacation_img[0].size>57000){
+            setAlert(true);
+        }else{
+        console.log(newVacation.vacation_img[0])
+        console.log(await getBase64(newVacation.vacation_img[0]));
+        setFile(await getBase64(newVacation.vacation_img[0]));
+        newVacation.vacation_img = await getBase64(newVacation.vacation_img[0]);
+        // const [file, setFile] = useState();
+        // const [fileName, setFileName] = useState("");
+     
+        // const saveFile = (e) => {
+        //     setFile(e.target.files[0]);
+        //     setFileName(e.target.files[0].name);
+        // };
+     
+            // const formData = new FormData();
+            // formData.append("file", file);
+            // formData.append("fileName", fileName);
+        //     try {
+        //         const res = await axios.post(
+        //             "http://localhost:3000/upload",
+        //         formData
+        //     );
+        //       console.log(res);
+        //     } catch (ex) {
+        //       console.log(ex);
+        //     }
+        // };
         try {
             if (id===0){
+                // newVacation.vacation_img[0] = file;
                 await axios.post("http://localhost:3003/admin/vacation/",newVacation,
                 )
                 .then(res=>{
@@ -55,6 +113,7 @@ function AddVacation(): JSX.Element {
                 newVacation.price = newVacation.price || vacation?.price;
                 newVacation.start_date = newVacation.start_date || vacation?.start_date;
                 newVacation.end_date = newVacation.end_date || vacation?.end_date;
+                newVacation.vacation_img = vacation?.vacation_img || file;
                 await axios.put("http://localhost:3003/admin/vacation/update", newVacation)
                 .then(res=>{
                     //update the localStorage
@@ -68,7 +127,7 @@ function AddVacation(): JSX.Element {
                 
         } catch (err: any) {
             console.log(err.message);
-        }
+        }}
     }
 
     return (
@@ -77,7 +136,7 @@ function AddVacation(): JSX.Element {
             <div className="Box">
                 <form onSubmit={handleSubmit(send)}>
                     <h2>Add Vacation!</h2>
-
+                    <div className = "Alert">{alertOn()}</div>
                     <label>destination:</label>
                     <input type="text" defaultValue={vacation?.destination} required {...register("destination")}/>
 
@@ -94,13 +153,14 @@ function AddVacation(): JSX.Element {
                     <input type="number" defaultValue={vacation?.price} required {...register("price")}/>
 
                     <label>vacation_img:</label>
-                    <input type="file" />
+                    <input type="file" {...register("vacation_img")} />
+                    
 
                     <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
                 </form>
             </div>
         </div>
     );
-}
+    }
 
 export default AddVacation;

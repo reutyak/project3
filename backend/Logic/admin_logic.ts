@@ -78,7 +78,7 @@ const addVacation = async (newVacation: Vacation): Promise<Vacation> => {
     '${newVacation.description}',
     '${newVacation.destination}',
     ${newVacation.price},
-    NULL,
+    '${newVacation.vacation_img}',
     '${newVacation.start_date}',
     '${newVacation.end_date}',
     NULL);`;

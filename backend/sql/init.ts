@@ -19,7 +19,7 @@ const vacation_sql=`CREATE TABLE IF NOT EXISTS vacation (
     description VARCHAR(150) NULL,
     destination VARCHAR(45) NULL,
     price DECIMAL(10,2) NULL,
-    vacation_img BLOB NULL,
+    vacation_img LONGTEXT NULL,
     start_date DATE NULL,
     end_date DATE NULL,
     amountOfFollowers INT NULL,
