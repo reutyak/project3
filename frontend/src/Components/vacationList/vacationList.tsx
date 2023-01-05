@@ -9,6 +9,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from "react-router";
 import React from "react";
 import { Pagination } from "@mui/material";
+import { store } from "../redux/store";
+import { VacationState, deleteVacationSt, getAllVacationSt, vacationActionType } from "../redux/vacationState";
 
 
 //import ReactPaginate from 'react-paginate';
@@ -18,29 +20,42 @@ import { Pagination } from "@mui/material";
 
 function VacationList(): JSX.Element {
     const navigate= useNavigate();
-    const[vacations,setVacations]=useState<Vacation[]>([]);
+    const[vacations,setVacations]=useState<Vacation[]>(store.getState().vacationState.vacationsSt);
     // const [loading, setLoading] = useState(false);
-
+    store.subscribe(()=>{
+        setVacations(store.getState().vacationState.vacationsSt);
+        console.log("subscribe");
+    });
     const [currentPage, setCurrentPage] = useState(1);
     const [cardsPerPage] = useState(10);
 
     const pageCount = Math.ceil(vacations.length / 10);
     // const [page, setPage] = React.useState(1);
 
+    // useEffect(()=>{
+    //     localStorage.setItem('vacations', JSON.stringify(vacations));
+    // },[vacations]);
+    
     useEffect(()=>{
-        localStorage.setItem('vacations', JSON.stringify(vacations));
-    },[vacations]);
+        setVacations(store.getState().vacationState.vacationsSt);
+        },[]);
 
     //const itemsPerPage=10;
         useEffect(()=>{      
             // setLoading(true);
-            let storageVacation = JSON.parse(localStorage.vacations);
-            console.log(storageVacation.length);
-            if(storageVacation.length > 0){
-             setVacations(storageVacation);
+            // let storageVacation = JSON.parse(localStorage.vacations);
+            // console.log(storageVacation.length);
+            // if(storageVacation.length > 0){
+            //  setVacations(storageVacation);
+            if(vacations.length>0){return
             }else{
+                console.log("000");
                 axios.get(`http://localhost:3003/admin/vacation/all`)
-                .then(response=>setVacations(response.data));
+                .then(response=>{
+                    // setVacations(response.data);
+                    store.dispatch(getAllVacationSt(response.data));
+                    // setVacations(store.getState().vacationReducer.vacations);
+                });
                 console.log("123");
                 console.log(vacations);
             }
@@ -80,7 +95,8 @@ function VacationList(): JSX.Element {
                         <div className="Buttons">
                             <IconButton className="btn" aria-label="delete"  color="error" size="large" onClick={()=>{
                                     axios.delete(`http://localhost:3003/admin/vacation/${item.id}`);
-                                    setVacations(vacations.filter(singleVacation=>singleVacation.id !== item.id));
+                                    // setVacations(vacations.filter(singleVacation=>singleVacation.id !== item.id));
+                                    store.dispatch(deleteVacationSt(item.id));
                                 }}>
                                 <DeleteIcon/>
                             </IconButton>

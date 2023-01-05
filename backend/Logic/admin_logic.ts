@@ -101,7 +101,7 @@ const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
     SET description='${vacation.description}',
     destination='${vacation.destination}',
     price=${vacation.price},
-    vacation_img=NULL,
+    vacation_img='${vacation.vacation_img}',
     start_date='${vacation.start_date}',
     end_date='${vacation.end_date}',
     amountOfFollowers=NULL
