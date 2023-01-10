@@ -9,11 +9,16 @@ export enum vacationActionType{
     deleteVacationSt="deleteVacationSt",
     addVacationSt="addVacationSt",
     updateVacationSt="updateVacationSt",
+    logOut = "logOut",
 };
 
 export interface VacationAction{
     type: vacationActionType;
     payload ?: any;
+};
+
+export function logOut(): VacationAction{
+    return {type: vacationActionType.logOut}
 };
 
 //function to handle the state changes (dispatch)
@@ -45,7 +50,9 @@ export function vacationReducer(
     const newState = JSON.parse(JSON.stringify(currentState));
 
     switch(action.type){
-
+    case vacationActionType.logOut:
+        newState.vacationsSt = [];
+    break;
     case vacationActionType.getAllVacationSt:
         console.log(action);
         newState.vacationsSt = action.payload;

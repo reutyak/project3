@@ -17,7 +17,9 @@ function AddVacation(): JSX.Element {
     const navigate = useNavigate();
     const params = useParams();
     const id = +(params.id || 0);
-    var storageVacation = JSON.parse(localStorage.vacations);
+    const myCurrentToken = localStorage.getItem("myToken");
+    axios.defaults.headers.common = {'Authorization': myCurrentToken}
+    // var storageVacation = JSON.parse(localStorage.vacations);
     // const [vacations, setVacations] = useState<Vacation[]>(storageVacation);
     const [vacations, setVacations] = useState<Vacation[]>(store.getState().vacationState.vacationsSt);
     // store.subscribe(()=>{
@@ -71,6 +73,8 @@ function AddVacation(): JSX.Element {
                 )
                 .then(res=>{
                     console.log(res.data);
+                    const currentToken = res.headers["authorization"];
+                    localStorage.setItem("myToken", currentToken||"");
                     const addProduct = res.data;
                     // (addProduct.amountOfFollowers?addProduct.amountOfFollowers=0:addProduct.amountOfFollowers="NULL")
                     //update the localStorage
@@ -101,6 +105,8 @@ function AddVacation(): JSX.Element {
                     // localStorage.setItem("vacations", JSON.stringify(vacations));
                     const addProduct = res.data;
                     // store.dispatch(updateVacationSt(addProduct));
+                    const currentToken = res.headers["authorization"];
+                    localStorage.setItem("myToken", currentToken||"");
                     store.dispatch(deleteVacationSt(id));
                     console.log(store.getState().vacationState.vacationsSt);
                     store.dispatch(addVacationSt(addProduct));

@@ -14,6 +14,7 @@ import {
   } from 'chart.js';
   
   import { Bar } from 'react-chartjs-2';
+import { store } from "../redux/store";
   
   ChartJS.register(
     CategoryScale,
@@ -29,23 +30,28 @@ import {
 function Report(): JSX.Element {
     
     const [vacations, setVacations]=useState<Vacation[]>([]);
-
-    useEffect(()=>{
-        let storageVacation = JSON.parse(localStorage.vacations);
-        console.log(storageVacation.length);
-        if(storageVacation.length > 0)
-        {
-            setVacations(storageVacation);
-        }else{
-            axios.get(`http://localhost:3003/admin/vacation/all`)
-            .then(response=>setVacations(response.data));
-            console.log("123");
-            console.log(vacations);
-        }
+    const myCurrentToken = localStorage.getItem("myToken");
+    axios.defaults.headers.common = {'Authorization': myCurrentToken}
+    store.subscribe(()=>{
+        setVacations(store.getState().vacationState.vacationsSt);
+        console.log("subscribe");
+    });
+    // useEffect(()=>{
+    //     let storageVacation = JSON.parse(localStorage.vacations);
+    //     console.log(storageVacation.length);
+    //     if(storageVacation.length > 0)
+    //     {
+    //         setVacations(storageVacation);
+    //     }else{
+    //         axios.get(`http://localhost:3003/admin/vacation/all`)
+    //         .then(response=>setVacations(response.data));
+    //         console.log("123");
+    //         console.log(vacations);
+    //     }
         // axios.get("http://localhost:3003/admin/vacation/all")
         // .then(response=>setVacations(response.data));
         
-    },[])
+    // },[])
     
     const names=new Array<string>();
     const followers=new Array<number>();

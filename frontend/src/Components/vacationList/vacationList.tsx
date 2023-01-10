@@ -19,6 +19,8 @@ import { VacationState, deleteVacationSt, getAllVacationSt, vacationActionType }
 
 
 function VacationList(): JSX.Element {
+    const myCurrentToken = localStorage.getItem("myToken");
+    axios.defaults.headers.common = {'Authorization': myCurrentToken}
     const navigate= useNavigate();
     const[vacations,setVacations]=useState<Vacation[]>(store.getState().vacationState.vacationsSt);
     // const [loading, setLoading] = useState(false);
@@ -47,7 +49,7 @@ function VacationList(): JSX.Element {
             // console.log(storageVacation.length);
             // if(storageVacation.length > 0){
             //  setVacations(storageVacation);
-            if(vacations.length>0){return
+            if(vacations.length>0){console.log(vacations.length)
             }else{
                 console.log("000");
                 axios.get(`http://localhost:3003/admin/vacation/all`)
@@ -94,9 +96,21 @@ function VacationList(): JSX.Element {
                         <p>{item.description}</p>
                         <div className="Buttons">
                             <IconButton className="btn" aria-label="delete"  color="error" size="large" onClick={()=>{
-                                    axios.delete(`http://localhost:3003/admin/vacation/${item.id}`);
+                                // try{
+                                    axios.delete(`http://localhost:3003/admin/vacation/${item.id}`).then(
+                                        res=>{
+                                            console.log(res.headers["authorization"]);
+                                            const currentToken = res.headers["authorization"];
+                                            localStorage.setItem("myToken", currentToken||"");
+                                            store.dispatch(deleteVacationSt(item.id));
+                                        }
+                                    );
                                     // setVacations(vacations.filter(singleVacation=>singleVacation.id !== item.id));
-                                    store.dispatch(deleteVacationSt(item.id));
+                                    // store.dispatch(deleteVacationSt(item.id));
+                                // }finally{
+                                //     alert("you have to login again");
+                                //     navigate("/");
+                                // }
                                 }}>
                                 <DeleteIcon/>
                             </IconButton>

@@ -18,6 +18,16 @@ const currentPort = config.port;
 // server.use(bodyParser.json());
 // server.use(bodyParser.urlencoded({ extended: true }));
 server.use(cors());
+//cors option
+var corsOptions = {
+    "origin": "*", //expose to all server around the world
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE", //expose which methods are allowed
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204,
+    "exposedHeaders" : "Authorization" //expose the Authorization header
+  }
+
+server.use(cors(corsOptions));
 server.use(express.json());
 server.use("/admin",admin_router);
 server.use("/user",user_router);

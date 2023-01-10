@@ -17,6 +17,7 @@ function Routing(): JSX.Element {
                 <Route path = "/register" element= {<Register/>}/>
                 <Route path = "/modal" element= {<Modal/>}/>
                 <Route path = "/admin" element={<Admin/>}/>
+                <Route path = "/admin/all" element={<VacationList/>}/>
                 <Route path = "/admin/addVacation" element={<AddVacation/>}/>
                 <Route path = "/admin/addVacation/:id" element={<AddVacation/>}/>
                 <Route path = "/admin/report" element={<Report/>}/>

@@ -7,7 +7,8 @@ class Config {
     public mySQLUser = "root";
     public mySQLPassword = "12345678";
     public mySQLdb = "vacation_project3";
-    //another database
+    public JWT_SECRET_KEY = "project3WithToken";
+
 }
 
 const config = new Config();

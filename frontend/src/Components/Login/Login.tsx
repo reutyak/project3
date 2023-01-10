@@ -9,6 +9,8 @@ import User from "../../Models/User";
 import "./Login.css";
 import { useState } from "react";
 import { useEffect } from "react";
+import { store } from "../redux/store";
+import { logOut } from "../redux/vacationState";
 
 
 
@@ -25,14 +27,17 @@ function Login(): JSX.Element {
             return <Alert variant="outlined" severity="error">One of the details you entered is incorrect</Alert>
         }
     };
-    
     const usersMap = (user_name:string,password:string) => {
         let response = false;
         users.map((user: { user_name: string; password: string; }) => {if (hash(user_name)===user.user_name && hash(password)===user.password){response = true}
         else{setAlert(true)}});
         return response
     };
-        
+       
+    useEffect(()=>{
+        // store.dispatch(logOut());
+        localStorage.setItem('myToken', "");
+    },[]);
 
     useEffect(()=>{
         axios.get("http://localhost:3003/admin/all")
@@ -43,8 +48,16 @@ function Login(): JSX.Element {
 
 const send =  async (userLogin: LoginModel) => {
         try {
-                if(userLogin.typeUser === "admin" && hash(userLogin.user_name) === admin[0].admin_name && hash(userLogin.password) === admin[0].admin_code){
-                    navigate("/admin")
+                // if(userLogin.typeUser === "admin" && hash(userLogin.user_name) === admin[0].admin_name && hash(userLogin.password) === admin[0].admin_code){
+                if(userLogin.typeUser === "admin"){
+                axios.post("http://localhost:3003/admin/login", userLogin)
+                    .then(response=>{
+                        console.log(response.headers["authorization"]);
+                        const currentToken = response.headers["authorization"];
+                        localStorage.setItem("myToken", currentToken||"");
+                        console.log(response.data);
+                        response.data?navigate("/admin"):navigate("/");
+                    })
                 }
                 if (userLogin.typeUser === "user" && usersMap(userLogin.user_name,userLogin.password)===true){
                     navigate("/user")
