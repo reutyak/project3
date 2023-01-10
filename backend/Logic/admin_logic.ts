@@ -96,14 +96,17 @@ const deleteVacation = async (id: number): Promise<void> => {
 }
 
 const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
+    const start_date_update = (vacation.start_date).toString().split("T")[0];
+    const end_date_update = (vacation.end_date).toString().split("T")[0];
+    // const end_date_update = new Date(vacation.end_date);
     const sql = `
     UPDATE vacation 
     SET description='${vacation.description}',
     destination='${vacation.destination}',
     price=${vacation.price},
     vacation_img='${vacation.vacation_img}',
-    start_date='${vacation.start_date}',
-    end_date='${vacation.end_date}',
+    start_date='${start_date_update}',
+    end_date='${end_date_update}',
     amountOfFollowers=NULL
     WHERE id = ${vacation.id}
     `;

@@ -60,13 +60,18 @@ function AddVacation(): JSX.Element {
     }
     
     const send = async (newVacation: Vacation) => {
-        if(newVacation.vacation_img[0].size>57000){
+        console.log(newVacation.start_date);
+        if(newVacation.vacation_img[0]?.size>57000){
             setAlert(true);
         }else{
-        console.log(newVacation.vacation_img[0])
-        console.log(await getBase64(newVacation.vacation_img[0]));
-        setFile(await getBase64(newVacation.vacation_img[0]));
-        newVacation.vacation_img = await getBase64(newVacation.vacation_img[0]);
+            try{
+                console.log(newVacation.vacation_img)
+                console.log(await getBase64(newVacation.vacation_img[0]));
+                setFile(await getBase64(newVacation.vacation_img[0]));
+                newVacation.vacation_img = await getBase64(newVacation.vacation_img[0]);
+            }catch (err: any) {
+                console.log(err.message);
+            }
         try {
             if (id===0){
                 await axios.post("http://localhost:3003/admin/vacation/",newVacation,
@@ -144,7 +149,9 @@ function AddVacation(): JSX.Element {
                     <input type="number" defaultValue={vacation?.price} required {...register("price")}/>
 
                     <label>vacation_img:</label>
-                    <input type="file" defaultValue={vacation?.vacation_img} {...register("vacation_img")} />
+                    {/* {vacation?<input type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")}/>: */}
+                    <input type="file" {...register("vacation_img")} />
+                    {/* <input type="file" defaultValue={vacation?.vacation_img} {...register("vacation_img")} /> */}
                     
 
                     <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
