@@ -69,25 +69,27 @@ const send =  async (userLogin: LoginModel) => {
         }
     }
     return (
-        <div className="Login">
-            <form onSubmit={handleSubmit(send)}>
-			<div className="Box">
-                <h2>Login</h2>
-                <div className = "Alert">{alertOn()}</div>
-                <label>Select a user type</label>
-                <select required {...register("typeUser")}>
-                    <option>admin</option>
-                    <option>user</option>
-                </select>
-                <label>Enter User Name</label>
-                <input type="text" required {...register("user_name")}></input>
-                <label>Enter Password</label>
-                <input type="password" required {...register("password")}></input>
-                <input required type="submit" value="Entrance"/>
-                <p>Don't have an account?<NavLink to="/register"><h3>Register</h3></NavLink></p>
-                </div>
-            </form>
-        </div>
+                
+<div className="Login">
+        <form className="login" onSubmit={handleSubmit(send)}>
+        <div className="form container">
+            <h4 className="head">Login</h4>
+            <div className = "Alert">{alertOn()}</div>
+            <label>Select a user type:</label>
+            <select className="form-control" required {...register("typeUser")}>
+                <option>admin</option>
+                <option>user</option>
+            </select>
+            <label htmlFor="sel">Enter User Name:</label>
+            <input  className="form-control" id="sel" type="text" required {...register("user_name")}></input>
+            <label>Enter Password:</label>
+            <input  className="form-control" type="password" required {...register("password")}></input>
+            <input  className="btn btn-primary" required type="submit" value="Entrance"/>
+            <br />
+            <p>Don't have an account yet?&nbsp;&nbsp;<NavLink to="/register"><span> Register&nbsp;</span></NavLink></p>
+            </div>
+        </form>
+    </div>
     );
 }
 

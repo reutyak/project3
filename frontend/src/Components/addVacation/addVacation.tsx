@@ -13,6 +13,7 @@ function AddVacation(): JSX.Element {
     const { register, handleSubmit } = useForm<Vacation>();
     const [file, setFile] = useState("");
     const [alert, setAlert] = useState<Boolean>(false);
+    const [pic, setPic] = useState<Boolean>(false);
     const [vacation, setVacation] = useState<Vacation>();
     const navigate = useNavigate();
     const params = useParams();
@@ -29,6 +30,15 @@ function AddVacation(): JSX.Element {
         if (alert === true){
             return <Alert variant="outlined" severity="error">Image size must be smaller than 530KB </Alert>
         }
+    };
+    
+    const setPicFunc=()=>{
+        setPic(true)
+    }
+    const updatePic=()=>{
+        if(pic===true){
+                return <input type="file" {...register("vacation_img")} />
+        }     
     };
 
     // useEffect(() => {
@@ -100,7 +110,11 @@ function AddVacation(): JSX.Element {
                 newVacation.price = newVacation.price || vacation?.price;
                 newVacation.start_date = newVacation.start_date || vacation?.start_date;
                 newVacation.end_date = newVacation.end_date || vacation?.end_date;
-                newVacation.vacation_img = newVacation.vacation_img || vacation?.vacation_img;
+                if(pic===false){
+                    newVacation.vacation_img = vacation?.vacation_img;
+                }else{
+                    newVacation.vacation_img = newVacation.vacation_img;
+                }
                 await axios.put("http://localhost:3003/admin/vacation/update", newVacation)
                 .then(res=>{
                     //update the localStorage
@@ -149,12 +163,12 @@ function AddVacation(): JSX.Element {
                     <input type="number" defaultValue={vacation?.price} required {...register("price")}/>
 
                     <label>vacation_img:</label>
-                    {/* {vacation?<input type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")}/>: */}
-                    <input type="file" {...register("vacation_img")} />
-                    {/* <input type="file" defaultValue={vacation?.vacation_img} {...register("vacation_img")} /> */}
+                    {vacation?(<><p hidden><input  type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")}/></p><button onClick={setPicFunc}>Update Picture</button></>):
+                    <input type="file" {...register("vacation_img")} />}
                     
-
+{/* <img style={{ height: 50, borderRadius: 20 }} src={vacation?.vacation_img} {...register("vacation_img")} /> */}
                     <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
+                    <p>{updatePic()}</p>
                 </form>
             </div>
         </div>

@@ -98,6 +98,7 @@ const deleteVacation = async (id: number): Promise<void> => {
 const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
     const start_date_update = (vacation.start_date).toString().split("T")[0];
     const end_date_update = (vacation.end_date).toString().split("T")[0];
+    console.log(vacation.vacation_img+"122");
     // const end_date_update = new Date(vacation.end_date);
     const sql = `
     UPDATE vacation 

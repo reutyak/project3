@@ -1,4 +1,21 @@
 .Header {
 	text-align: center;
-    margin-top: 4%;
+    margin-top: 5px;
+    height:130px;
+    
+}
+.header{
+    font-size: 35px;
+    font-weight: 900;
+    padding-bottom: 0%;
+    margin-top:30px;
+    font-family: Ink Free ;
+    
+}
+.span{
+    font-weight: 900;
+    font-family: Ink Free ;
+}
+.second{
+    font-weight: 400;
 }
