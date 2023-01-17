@@ -12,9 +12,11 @@ import { Pagination } from "@mui/material";
 import { store } from "../redux/store";
 import { VacationState, deleteVacationSt, getAllVacationSt, vacationActionType } from "../redux/vacationState";
 import User from "../../Models/User";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function UserVacationList(): JSX.Element {
-    var hash = require('object-hash');
+    // var hash = require('object-hash');
 
     const myCurrentToken = localStorage.getItem("myToken");
     axios.defaults.headers.common = {'Authorization': myCurrentToken}
@@ -30,7 +32,7 @@ function UserVacationList(): JSX.Element {
     const [cardsPerPage] = useState(10);
 
     const [currentUser,setUser]=useState<User>();
-
+    
     class forLikedPosts{
         id:number=0;
         description:string | undefined;
@@ -93,7 +95,6 @@ function UserVacationList(): JSX.Element {
         //     }
         // })       
         let myFollowed=currentUser?.followed_list?currentUser?.followed_list:[];  
-           
         console.log(currentUser?.followed_list)
         const pageCount = Math.ceil(vacations.length / 10);
         vacations.map((item)=>{
@@ -124,7 +125,7 @@ function UserVacationList(): JSX.Element {
         // Get currCards
         const indexOfLastCard = currentPage * cardsPerPage;
         const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-        const currentCards = sortedVacations.slice(indexOfFirstCard, indexOfLastCard);
+        let currentCards = sortedVacations.slice(indexOfFirstCard, indexOfLastCard);
 
         // Change page
         const paginate = (pageNumber:any) => setCurrentPage(pageNumber);
@@ -135,7 +136,27 @@ function UserVacationList(): JSX.Element {
         };
 
 
-
+        const handleLikeClick=(postId: number)=> {
+            let myLike=false;
+           currentCards.map(post => {
+              if (post.id === postId) {
+                post.isLiked=!post.isLiked;
+                post.amountOfFollowers=post.isLiked ? post.amountOfFollowers-1 : post.amountOfFollowers+1;
+                console.log(post.amountOfFollowers,post.isLiked);
+                myLike= post.isLiked;
+                // return {
+                //   ...post,
+                //   isLiked: !post.isLiked,
+                //   likeCount: post.isLiked ? post.amountOfFollowers-1 : post.amountOfFollowers+1
+                // }
+              }
+              myLike= post.isLiked;
+            });
+            return myLike;
+            // currentCards=updatedPosts;
+            // return isLiked;
+            // userVacationsList.setState({ posts: updatedPosts });
+          }
 
     return (
         <div className="UserVacationList">
@@ -149,11 +170,10 @@ function UserVacationList(): JSX.Element {
                         <p>{new Date(item.start_date).toISOString().slice(8,10)}/{new Date(item.start_date).toISOString().slice(5,7)}/{new Date(item.start_date).toISOString().slice(0,4)} - {new Date(item.end_date).toISOString().slice(8,10)}/{new Date(item.end_date).toISOString().slice(5,7)}/{new Date(item.end_date).toISOString().slice(0,4)}</p>
                         <p>{item.description}</p>
                         <div className="Buttons">
-                            <IconButton className="btn" aria-label="edit" color="success" onClick={() => {
-                                    navigate(`/admin/addVacation/${item.id}`);
-                                }}>
-                                <EditIcon/>
-                            </IconButton>
+                            <IconButton className="btn" aria-label="edit" color="success" onClick={()=>item.isLiked=handleLikeClick(item.id)}>
+                                {item.isLiked ?( <FavoriteIcon/>) :( <FavoriteBorderIcon/>)}
+                            </IconButton>{item.amountOfFollowers} 
+
                         </div>
                     </div>
                     )}
