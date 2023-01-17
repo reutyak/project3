@@ -1,0 +1,11 @@
+.modalAuth {
+	/* margin-bottom: 40%;
+    display:block   ;
+    text-align: center;
+    border: 2px solid black; */
+}
+.Modal>.Modal.Footer>.Button{
+    text-align: center;
+    margin-right:40% ;
+    align-self: center;
+}

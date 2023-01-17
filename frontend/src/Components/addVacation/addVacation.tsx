@@ -8,8 +8,10 @@ import "./addVacation.css";
 import { Alert } from "@mui/material";
 import { store } from "../redux/store";
 import { addVacationSt, deleteVacationSt, updateVacationSt, vacationActionType } from "../redux/vacationState";
+import ModalAuth from "../modalAuth/modalAuth";
 
 function AddVacation(): JSX.Element {
+    const [modalShow, setModalShow] = useState(false);
     const { register, handleSubmit } = useForm<Vacation>();
     const [file, setFile] = useState("");
     const [alert, setAlert] = useState<Boolean>(false);
@@ -38,6 +40,12 @@ function AddVacation(): JSX.Element {
     const updatePic=()=>{
         if(pic===true){
                 return <input type="file" {...register("vacation_img")} />
+        }     
+    };
+
+    const modalUp=()=>{
+        if(modalShow===true){
+                return <ModalAuth show={modalShow} onHide={() => {setModalShow(false);navigate("/")}} />
         }     
     };
 
@@ -136,42 +144,49 @@ function AddVacation(): JSX.Element {
             }
                 
         } catch (err: any) {
+            if(err.message=="Request failed with status code 401"){setModalShow(true)}
             console.log(err.message);
         }}
     }
 
+
     return (
+
         <div className="addVacation">
-			<header><MenuAdmin/></header>
-            <div className="Box">
-                <form onSubmit={handleSubmit(send)}>
-                    <h2>Add Vacation!</h2>
-                    <div className = "Alert">{alertOn()}</div>
-                    <label>destination:</label>
-                    <input type="text" defaultValue={vacation?.destination} required {...register("destination")}/>
-        
-                    <label>description:</label>
-                    <input type="text" defaultValue={vacation?.description} required {...register("description")}/>
+                <div>{modalUp()}</div>
+                <header><MenuAdmin /></header>
+                {/* <><Button variant="primary" onClick={() => setModalShow(true)}>
+            Launch vertically centered modal
+        </Button><ModalAuth show={modalShow} onHide={() => setModalShow(false)} /></> */}
+                <div className="Box">
+                    <form onSubmit={handleSubmit(send)}>
+                        <h2>Add Vacation!</h2>
+                        <div className="Alert">{alertOn()}</div>
+                        <label>destination:</label>
+                        <input type="text" defaultValue={vacation?.destination} required {...register("destination")} />
 
-                    <label>start_date:</label>
-                    <input type="date" defaultValue={vacation?(new Date(vacation?.start_date)).toISOString().slice(0,10):""}  required {...register("start_date")}/>
+                        <label>description:</label>
+                        <input type="text" defaultValue={vacation?.description} required {...register("description")} />
 
-                    <label>end_date:</label>
-                    <input type="date" defaultValue={vacation?(new Date(vacation?.end_date)).toISOString().slice(0,10):""} required {...register("end_date")}/>
+                        <label>start_date:</label>
+                        <input type="date" defaultValue={vacation ? (new Date(vacation?.start_date)).toISOString().slice(0, 10) : ""} required {...register("start_date")} />
 
-                    <label>price:</label>
-                    <input type="number" defaultValue={vacation?.price} required {...register("price")}/>
+                        <label>end_date:</label>
+                        <input type="date" defaultValue={vacation ? (new Date(vacation?.end_date)).toISOString().slice(0, 10) : ""} required {...register("end_date")} />
 
-                    <label>vacation_img:</label>
-                    {vacation?(<><p hidden><input  type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")}/></p><button onClick={setPicFunc}>Update Picture</button></>):
-                    <input type="file" {...register("vacation_img")} />}
-                    
-{/* <img style={{ height: 50, borderRadius: 20 }} src={vacation?.vacation_img} {...register("vacation_img")} /> */}
-                    <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
-                    <p>{updatePic()}</p>
-                </form>
+                        <label>price:</label>
+                        <input type="number" defaultValue={vacation?.price} required {...register("price")} />
+
+                        <label>vacation_img:</label>
+                        {vacation ? (<><p hidden><input type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")} /></p><button onClick={setPicFunc}>Update Picture</button></>) :
+                            <input type="file" {...register("vacation_img")} />}
+
+                        {/* <img style={{ height: 50, borderRadius: 20 }} src={vacation?.vacation_img} {...register("vacation_img")} /> */}
+                        <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
+                        <p>{updatePic()}</p>
+                    </form>
+                </div>
             </div>
-        </div>
     );
     }
 
