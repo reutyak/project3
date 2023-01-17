@@ -2,11 +2,12 @@ import jwt from "jsonwebtoken";
 import config from "./config";
 
 
-const getJWT = (userName: string) => {
+const getJWT = (userName: string,userId:number) => {
     let data = {
         exp: Math.floor(Date.now() / 1000) + (60 * 1),
         "timeStamp": Date(),
         user: userName,
+        id:userId
         // exp: Math.floor(Date.now() / 1000) + (60 * 30),
     }
 
@@ -36,7 +37,15 @@ const checkJWT = async (token: string): Promise<boolean> => {
         }
     });
 }
-
+const getUserIdFromJWT=async (token:any)=>{
+    try {
+        const myToken:any = jwt.decode(token);
+        return myToken.id;
+    } catch (err) {
+        //console.log(err);
+        console.log("error getting user...");
+    }
+}
 const getUserNameFromJWT = async (token:any) => {
     try {
         const myToken:any = jwt.decode(token);
@@ -61,5 +70,6 @@ export {
     getJWT,
     checkJWT,
     getUserNameFromJWT,
-    getExpFromJWT
+    getExpFromJWT,
+    getUserIdFromJWT
 }

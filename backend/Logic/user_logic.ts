@@ -3,11 +3,12 @@
 import dal from "../Utils/dal_mysql"
 import { OkPacket } from "mysql";
 import User from "../Models/User";
+import Vacation from "../Models/Vacation";
 
 var hash = require('object-hash');
 
 // functions( async / await ) for getting data from DB
-const getAllUsers = async (): Promise<User> => {
+const getAllUsers = async (): Promise<User[]> => {
     // command line for the DB
     const sql = `
         SELECT * FROM user
@@ -34,7 +35,8 @@ const addUser = async (newUser: User): Promise<User> => {
     '${newUser.name}',
     '${newUser.last_name}',
     '${hash(newUser.user_name)}',
-    '${hash(newUser.password)}'
+    '${hash(newUser.password)}',
+    ${[0]}
     )
     `
     const response : OkPacket = await dal.execute(sql);
@@ -64,11 +66,35 @@ const updateUser = async (user: User): Promise<User> => {
     return user;
 }
 
+
+// functions( async / await ) for getting data from DB
+const getAllVacations = async (): Promise<Vacation[]> => {
+    // command line for the DB
+    const sql = `
+        SELECT * FROM vacation`;
+    // a promise function that connects us to the database with the command line
+    const vacation = await dal.execute(sql);
+    return vacation;
+}
+
+const getSingleVacation = async (id:number): Promise<Vacation> => {
+    // command line for the DB
+    const sql = `
+        SELECT * FROM vacation
+        WHERE vacation.id=${id};
+    `;
+    // a promise function that connects us to the database with the command line
+    const something = await dal.execute(sql);
+    return something;
+}
+
 // exporting 
 export default {
     getAllUsers,
     getSingleUser,
     addUser,
     deleteUser,
-    updateUser
+    updateUser,
+    getSingleVacation,
+    getAllVacations
 }

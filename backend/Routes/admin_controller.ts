@@ -1,7 +1,7 @@
 // All the routes that connect the the DB and client.
 import express, {NextFunction, Request, Response} from 'express';
 import admin_logic from '../Logic/admin_logic';
-import { checkJWT, getExpFromJWT, getJWT, getUserNameFromJWT } from '../Utils/jwt';
+import { checkJWT, getExpFromJWT, getJWT, getUserIdFromJWT, getUserNameFromJWT } from '../Utils/jwt';
 
 // generic router 
 const admin_router = express.Router();
@@ -30,7 +30,7 @@ admin_router.post("/login", async (request: Request, response: Response, next: N
   if(detailsAdmin.typeUser === "admin" && hash(detailsAdmin.user_name) === admin[0].admin_name && hash(detailsAdmin.password) === admin[0].admin_code){
   console.log(detailsAdmin.user_name);
   console
-  const token = await getJWT(detailsAdmin.user_name);
+  const token = await getJWT(detailsAdmin.user_name,detailsAdmin.id);
   console.log(token);
   //add token to the system...
   await response.set("Authorization",`Bearer ${token}`);
@@ -58,8 +58,10 @@ admin_router.delete("/delete/:id", async (request: Request, response: Response, 
   if (request.headers.authorization){
     //create new JWT
     const userName = getUserNameFromJWT(request.headers.authorization);
+    const userId=getUserIdFromJWT(request.headers.authorization);
     console.log("my user name: ",userName);
-    response.set("Authorization",`Bearer ${await getJWT(await userName)}`);
+    console.log("my user id: ",userId);
+    response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
     //return the response
     response.status(204).json( await admin_logic.deleteAdmin(someData));
   } else {
@@ -78,8 +80,10 @@ admin_router.put("/update", async (request: Request, response: Response, next: N
 admin_router.get("/vacation/all", async (request: Request, response: Response, next: NextFunction) => {
   if (request.headers.authorization &&  await checkJWT(request.headers.authorization)) {
     const userName = getUserNameFromJWT(request.headers.authorization);
+    const userId=getUserIdFromJWT(request.headers.authorization);
     console.log("my user name: ",userName);
-    response.set("Authorization",`Bearer ${await getJWT(await userName)}`);
+    console.log("my user id: ",userId);
+    response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
     //return the response
     response.status(200).json( await admin_logic.getAllVacations());
   } else {
@@ -98,8 +102,10 @@ admin_router.post("/vacation/", async (request: Request, response: Response, nex
   if (request.headers.authorization &&  await checkJWT(request.headers.authorization)){
     //create new JWT
     const userName =await getUserNameFromJWT(request.headers.authorization);
+    const userId=getUserIdFromJWT(request.headers.authorization);
     console.log("my user name: ",userName);
-    response.set("Authorization",`Bearer ${await getJWT(userName)}`);
+    console.log("my user id: ",userId);
+    response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
     //return the response
     const someData = request.body;
     response.status(201).json( await admin_logic.addVacation(someData))
@@ -116,8 +122,10 @@ admin_router.delete("/vacation/:id", async (request: Request, response: Response
   if (request.headers.authorization &&  await checkJWT(request.headers.authorization)){
     //create new JWT
     const userName = getUserNameFromJWT(request.headers.authorization);
+    const userId=getUserIdFromJWT(request.headers.authorization);
     console.log("my user name: ",userName);
-    response.set("Authorization",`Bearer ${await getJWT(await userName)}`);
+    console.log("my user id: ",userId);
+    response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
     //return the response
     response.status(204).json( await admin_logic.deleteVacation(someData));
   } else {
@@ -132,8 +140,10 @@ admin_router.put("/vacation/update", async (request: Request, response: Response
   if (request.headers.authorization &&  await checkJWT(request.headers.authorization)){
     //create new JWT
     const userName = getUserNameFromJWT(request.headers.authorization);
+    const userId=getUserIdFromJWT(request.headers.authorization);
     console.log("my user name: ",userName);
-    response.set("Authorization",`Bearer ${await getJWT(await userName)}`);
+    console.log("my user id: ",userId);
+    response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
     response.status(201).json( await admin_logic.updateVacation(body));
   }else{
     response.status(401).json("You are no authorized!!!");

@@ -58,9 +58,24 @@ const send =  async (userLogin: LoginModel) => {
                         console.log(response.data);
                         response.data?navigate("/admin"):navigate("/");
                     })
-                }
-                if (userLogin.typeUser === "user" && usersMap(userLogin.user_name,userLogin.password)===true){
-                    navigate("/user")
+                }//&& usersMap(userLogin.user_name,userLogin.password)===true
+                if (userLogin.typeUser === "user" ){
+                    users.map((item)=>{
+                        if(hash(userLogin.user_name)===item.user_name){
+                            userLogin.id=item.id;
+                            console.log(userLogin.id)
+                        }
+                        console.log(userLogin.id)
+
+                    })
+                    axios.post("http://localhost:3003/user/login", userLogin)
+                    .then(response=>{
+                        console.log(response.headers["authorization"]);
+                        const currentToken = response.headers["authorization"];
+                        localStorage.setItem("myToken", currentToken||"");
+                        localStorage.setItem("id",JSON.stringify(userLogin.id));
+                        console.log(response.data);
+                        response.data?navigate("/user"):navigate("/")});
                 }else{
                     setAlert(true);
                 }
