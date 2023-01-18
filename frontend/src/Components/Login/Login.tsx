@@ -37,6 +37,8 @@ function Login(): JSX.Element {
     useEffect(()=>{
         // store.dispatch(logOut());
         localStorage.setItem('myToken', "");
+        localStorage.setItem('id', "");
+
     },[]);
 
     useEffect(()=>{
@@ -60,20 +62,20 @@ const send =  async (userLogin: LoginModel) => {
                     })
                 }//&& usersMap(userLogin.user_name,userLogin.password)===true
                 if (userLogin.typeUser === "user" ){
-                    users.map((item)=>{
-                        if(hash(userLogin.user_name)===item.user_name){
-                            userLogin.id=item.id;
-                            console.log(userLogin.id)
-                        }
-                        console.log(userLogin.id)
+                    // users.map((item)=>{
+                    //     if(hash(userLogin.user_name)===item.user_name){
+                    //         userLogin.id=item.id;
+                    //         console.log(userLogin.id)
+                    //     }
+                    //     console.log(userLogin.id)
 
-                    })
+                    // })
                     axios.post("http://localhost:3003/user/login", userLogin)
                     .then(response=>{
                         console.log(response.headers["authorization"]);
                         const currentToken = response.headers["authorization"];
                         localStorage.setItem("myToken", currentToken||"");
-                        localStorage.setItem("id",JSON.stringify(userLogin.id));
+                        localStorage.setItem("id",response.data);
                         console.log(response.data);
                         response.data?navigate("/user"):navigate("/")});
                 }else{
