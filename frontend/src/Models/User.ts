@@ -4,8 +4,8 @@ class User{
     last_name:string="";
     user_name:string="";
     password:string="";
-    followed_list:number[]=[];
-    followed_list2:number[]=[];
+    followed_list:any="";
+    // followed_list2:number[]=[];
 }
 
 export default User;

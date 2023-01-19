@@ -28,7 +28,8 @@ function UserVacationList(): JSX.Element {
   const myCurrentToken = localStorage.getItem("myToken");
   axios.defaults.headers.common = { Authorization: myCurrentToken };
   const navigate = useNavigate();
-  const [users, setUsers] = useState<User[]>([]);
+  // const [myTempArr, setTempArr] = useState<any>([]);
+  let myTempArr: Array<any> = [];
   const [vacations, setVacations] = useState<Vacation[]>(
     store.getState().vacationState.vacationsSt
   );
@@ -40,7 +41,7 @@ function UserVacationList(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(10);
 
-  const [currentUser, setUser] = useState<User>();
+  const [currentUser, setUser] = useState<User>(new User());
 
   class forLikedPosts {
     id: number = 0;
@@ -97,6 +98,7 @@ function UserVacationList(): JSX.Element {
       .get(`http://localhost:3003/user/single/${+myUserName}`)
       .then((response) => setUser(response.data[0]));
     // setLoading(false);
+    console.log(User);
   }, [currentPage]);
 
   // users.map(item=>{
@@ -108,8 +110,14 @@ function UserVacationList(): JSX.Element {
   //         console.log("faild")
   //     }
   // })
-  let myFollowed = currentUser?.followed_list ? currentUser?.followed_list : [];
-  console.log(currentUser?.followed_list);
+  // const myTempArr:any = [];
+  useEffect(()=>{
+    let myFollowed = currentUser?.followed_list ? currentUser?.followed_list.split(",") : "";
+    for(let n=0;n<myFollowed.length; n+=1){
+      myTempArr.push(+myFollowed[(n)])
+    };
+  },[currentUser])
+  
   const pageCount = Math.ceil(vacations.length / 10);
   vacations.map((item) => {
     let templist = new forLikedPosts();
@@ -121,8 +129,8 @@ function UserVacationList(): JSX.Element {
     templist.start_date = item.start_date;
     templist.end_date = item.end_date;
     templist.amountOfFollowers = item.amountOfFollowers;
-    for (let i = 0; i < myFollowed.length; i++) {
-      if (item.id === +myFollowed[i]) {
+    for (let i = 0; i < myTempArr.length; i++) {
+      if (item.id == myTempArr[i]) {
         templist.isLiked = true;
       }
     }
@@ -176,6 +184,62 @@ function UserVacationList(): JSX.Element {
     // userVacationsList.setState({ posts: updatedPosts });
   };
 
+  const changeIcon = (item: forLikedPosts) => {
+    let upDateUser = new User();
+    upDateUser.id = currentUser?.id || 0;
+    upDateUser.name = currentUser?.name||"";
+    upDateUser.last_name = currentUser?.last_name||"";
+    upDateUser.user_name = currentUser?.user_name ||"";
+    upDateUser.password = currentUser?.password ||"";
+    console.log(currentUser?.followed_list);
+    upDateUser.followed_list = (currentUser?.followed_list);
+    console.log((upDateUser.followed_list));
+    // upDateUser.followed_list = [...(upDateUser.followed_list)];
+    // console.log(((upDateUser.followed_list).split("")[1]));
+    console.log(myTempArr);
+    let temp = myTempArr.filter((number: any)=> number != item.id);
+    console.log(temp);
+    if(temp.length>0){
+      console.log("exist");
+      myTempArr = myTempArr.filter((number: any) => number!== item.id);
+      console.log(myTempArr);
+      for(let i=0; i<myTempArr.length; i+=1){
+        upDateUser.followed_list = myTempArr[i]+","}
+        upDateUser.followed_list = upDateUser.followed_list.substring(0,upDateUser.followed_list.length-1)
+        currentUser.followed_list = upDateUser.followed_list;
+      }else{
+        console.log("not exist");
+        myTempArr.push(item.id);
+        myTempArr.length != 0?upDateUser.followed_list = upDateUser.followed_list+"," + item.id:upDateUser.followed_list =item.id;
+        currentUser.followed_list = upDateUser.followed_list;
+      }
+    
+    // console.log((upDateUser.followed_list));
+    console.log(currentUser);
+    setUser(upDateUser);
+    console.log(currentUser);
+    axios.put(`http://localhost:3003/user/update`,upDateUser)
+    .then((response) => console.log(response.data[0]));
+    console.log(item.isLiked);
+    item.isLiked === false ? (item.isLiked = true) : (item.isLiked = false);
+    console.log(item.isLiked);
+  };
+
+
+  function HeaderIcon(item: forLikedPosts) {
+    // const [isFollowed, setFolowed] = useState<boolean>(false);
+
+    return (
+      <div onClick={async () =>await changeIcon(item)}>
+        {myTempArr.includes(item.id) ? (
+          <FavoriteIcon></FavoriteIcon>
+        ) : (
+          <FavoriteBorderIcon></FavoriteBorderIcon>
+        )}
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="UserVacationList">
@@ -208,11 +272,12 @@ function UserVacationList(): JSX.Element {
                     className="btn"
                     aria-label="edit"
                     color="success"
-                    onClick={() => (item.isLiked = handleLikeClick(item.id))}
+                    onClick={() => changeIcon(item)}
                   >
-                    {item.isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                    {HeaderIcon(item)}
                   </IconButton>
                   {item.amountOfFollowers}
+                  {item.isLiked}
                 </div>
               </div>
             ))}

@@ -11,7 +11,7 @@ const user_sql=`CREATE TABLE IF NOT EXISTS user (
     last_name VARCHAR(45) NULL DEFAULT NULL,
     user_name VARCHAR(45) NULL DEFAULT NULL, 
     password VARCHAR(45) NULL,
-    followed_list JSON NULL,
+    followed_list VARCHAR(500) NULL,
     PRIMARY KEY (id));`;
 
 const vacation_sql=`CREATE TABLE IF NOT EXISTS vacation (
