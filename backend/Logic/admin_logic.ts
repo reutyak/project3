@@ -81,7 +81,7 @@ const addVacation = async (newVacation: Vacation): Promise<Vacation> => {
     '${newVacation.vacation_img}',
     '${newVacation.start_date}',
     '${newVacation.end_date}',
-    NULL);`;
+    ${0});`;
     const response : OkPacket = await dal.execute(sql);
     newVacation.id = response.insertId;
     return newVacation;
@@ -108,7 +108,7 @@ const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
     vacation_img='${vacation.vacation_img}',
     start_date='${start_date_update}',
     end_date='${end_date_update}',
-    amountOfFollowers=NULL
+    amountOfFollowers=${vacation.amountOfFollowers}
     WHERE id = ${vacation.id}
     `;
     await dal.execute(sql);

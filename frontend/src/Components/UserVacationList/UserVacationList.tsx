@@ -12,7 +12,7 @@ import React from "react";
 import { Pagination } from "@mui/material";
 import { store } from "../redux/store";
 import {
-  VacationState,
+  addVacationSt,
   deleteVacationSt,
   getAllVacationSt,
   vacationActionType,
@@ -74,12 +74,6 @@ function UserVacationList(): JSX.Element {
 
   //const itemsPerPage=10;
   useEffect(() => {
-    // setLoading(true);
-    // let storageVacation = JSON.parse(localStorage.vacations);
-    // console.log(storageVacation.length);
-    // if(storageVacation.length > 0){
-    //  setVacations(storageVacation);
-
     if (vacations.length > 0) {
       console.log(vacations.length);
     } else {
@@ -102,28 +96,8 @@ function UserVacationList(): JSX.Element {
     console.log(User);
   }, [currentPage]);
 
-  // users.map(item=>{
-
-  //     if(hash(myUserName)===item.user_name){
-  //         setUser(item);
-  //         console.log(currentUser);
-  //     }else{
-  //         console.log("faild")
-  //     }
-  // })
-  // const myTempArr:any = [];
-  // useEffect(()=>{
-  //   currentUser.followed_list = currentUser?.followed_list.substring(0,currentUser?.followed_list.length-1)||""
-  //   let myFollowed = currentUser?.followed_list ? currentUser?.followed_list.split(",") : "";
-  //   console.log(myFollowed);
-  //   for(let n=0;n<(myFollowed.length); n+=1){
-  //     myTempArr.push(+myFollowed[n])
-  //   };
-  //   console.log(myTempArr);
-
-  // },[currentUser])
-  
   const pageCount = Math.ceil(vacations.length / 10);
+
   vacations.map((item) => {
     let templist = new forLikedPosts();
     templist.id = item.id;
@@ -165,31 +139,7 @@ function UserVacationList(): JSX.Element {
     setCurrentPage(value);
   };
 
-  const handleLikeClick = (postId: number) => {
-    let myLike = false;
-    currentCards.map((post) => {
-      if (post.id === postId) {
-        post.isLiked = !post.isLiked;
-        post.amountOfFollowers = post.isLiked
-          ? post.amountOfFollowers - 1
-          : post.amountOfFollowers + 1;
-        console.log(post.amountOfFollowers, post.isLiked);
-        myLike = post.isLiked;
-        // return {
-        //   ...post,
-        //   isLiked: !post.isLiked,
-        //   likeCount: post.isLiked ? post.amountOfFollowers-1 : post.amountOfFollowers+1
-        // }
-      }
-      myLike = post.isLiked;
-    });
-    return myLike;
-    // currentCards=updatedPosts;
-    // return isLiked;
-    // userVacationsList.setState({ posts: updatedPosts });
-  };
-
-  const changeIcon = (item: forLikedPosts) => {
+  const changeIcon = async (item: forLikedPosts) => {
     currentUser.followed_list =currentUser?.followed_list.length>0? currentUser?.followed_list.substring(0,currentUser?.followed_list.length-1):"";
 
     let myFollowed = currentUser?.followed_list.length > 1 ?currentUser?.followed_list.split(",") : currentUser.followed_list;
@@ -243,11 +193,9 @@ function UserVacationList(): JSX.Element {
 
 
   function HeaderIcon(item: forLikedPosts) {
-    // const [isFollowed, setFolowed] = useState<boolean>(false);
-
     return (
       <div>
-        {myTempArr.includes(item.id) ? (
+        {currentUser.followed_list.includes(item.id) ? (
           <FavoriteIcon></FavoriteIcon>
         ) : (
           <FavoriteBorderIcon></FavoriteBorderIcon>
@@ -255,10 +203,79 @@ function UserVacationList(): JSX.Element {
       </div>
     );
   }
+  const handleLikeClick=(card:forLikedPosts)=> {
+    console.log(card);
+    // card.isLiked = !card.isLiked
+    changeIcon(card);
+    console.log(card);
+    let updateVacation = new Vacation();
+    updateVacation.id = card.id;
+    updateVacation.price = card.price;
+    updateVacation.destination = card.destination;
+    updateVacation.description = card.description;
+    updateVacation.start_date = card.start_date;
+    updateVacation.end_date = card.end_date;
+    updateVacation.vacation_img = card.vacation_img;
+    updateVacation.amountOfFollowers = currentUser.followed_list.includes(card.id)?card.amountOfFollowers+=1:card.amountOfFollowers-=1;
+    // updateVacation.amountOfFollowers = card.isLiked
+  //   let myLike=false;
+  //  currentCards.map(post => {
+  //     if (post.id === card.id) {
+  //       post.amountOfFollowers=post.isLiked ? post.amountOfFollowers-1 : post.amountOfFollowers+1;
+  //       console.log(post.amountOfFollowers)
+  //       vacations.map(item=>{
+  //           if (item.id === card.id) {
+  //               console.log("equal")
+  //               item.amountOfFollowers=post.amountOfFollowers;
+                axios.put(`http://localhost:3003/admin/vacation/update`,updateVacation)
+                .then(res=>{
+                    const addProduct = res.data;
+                    // store.dispatch(updateVacationSt(addProduct));
+                    console.log(store.getState().vacationState.vacationsSt)
+                    const currentToken = res.headers["authorization"];
+                    localStorage.setItem("myToken", currentToken||"");
+                    store.dispatch(deleteVacationSt(updateVacation.id));
+                    console.log(store.getState().vacationState.vacationsSt);
+                    store.dispatch(addVacationSt(addProduct));
+                    console.log(store.getState().vacationState.vacationsSt);
+                })
+                axios.get(`http://localhost:3003/admin/vacation/all`)
+                .then(response=>{
+                    store.dispatch(getAllVacationSt(response.data));
+                })
+              };
+//             }else(console.log("not equal"))
+//             post.isLiked=!post.isLiked;
+//         })
+//     }});
+//     card.isLiked=!card.isLiked;
+//     console.log(card.amountOfFollowers,card.isLiked);
+//     myLike= card.isLiked;
+
+//     // return {
+//     //   ...post,
+//     //   isLiked: !post.isLiked,
+//     //   likeCount: post.isLiked ? post.amountOfFollowers-1 : post.amountOfFollowers+1
+//     // }
+  
+//   myLike= card.isLiked;
+//     return myLike;
+//     // currentCards=updatedPosts;
+//     // return isLiked;
+//     // userVacationsList.setState({ posts: updatedPosts });
+// }
+  const [checked, setChecked] = useState(false);
 
   return (
     <>
       <div className="UserVacationList">
+      <Switch
+                    checked={checked}
+                    onChange={(args)=>{
+                        setChecked(args.target.checked);
+                    }}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                /><span>wishlist</span>
         <div className="displayCard">
           <div className="card">
             {currentCards.map((item) => (
@@ -288,7 +305,7 @@ function UserVacationList(): JSX.Element {
                     className="btn"
                     aria-label="edit"
                     color="success"
-                    onClick={() => changeIcon(item)}
+                    onClick={() => handleLikeClick(item)}
                   >
                     {HeaderIcon(item)}
                   </IconButton>
