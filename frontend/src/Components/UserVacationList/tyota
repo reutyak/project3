@@ -21,7 +21,6 @@ import User from "../../Models/User";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import MenuUser from "../MenuUser/MenuUser";
-import Switch from '@mui/material/Switch';
 
 function UserVacationList(): JSX.Element {
   // var hash = require('object-hash');
@@ -112,16 +111,12 @@ function UserVacationList(): JSX.Element {
   //     }
   // })
   // const myTempArr:any = [];
-  // useEffect(()=>{
-  //   currentUser.followed_list = currentUser?.followed_list.substring(0,currentUser?.followed_list.length-1)||""
-  //   let myFollowed = currentUser?.followed_list ? currentUser?.followed_list.split(",") : "";
-  //   console.log(myFollowed);
-  //   for(let n=0;n<(myFollowed.length); n+=1){
-  //     myTempArr.push(+myFollowed[n])
-  //   };
-  //   console.log(myTempArr);
-
-  // },[currentUser])
+  useEffect(()=>{
+    let myFollowed = currentUser?.followed_list ? currentUser?.followed_list.split(",") : "";
+    for(let n=0;n<myFollowed.length; n+=1){
+      myTempArr.push(+myFollowed[(n)])
+    };
+  },[currentUser])
   
   const pageCount = Math.ceil(vacations.length / 10);
   vacations.map((item) => {
@@ -190,15 +185,6 @@ function UserVacationList(): JSX.Element {
   };
 
   const changeIcon = (item: forLikedPosts) => {
-    currentUser.followed_list =currentUser?.followed_list.length>0? currentUser?.followed_list.substring(0,currentUser?.followed_list.length-1):"";
-
-    let myFollowed = currentUser?.followed_list.length > 1 ?currentUser?.followed_list.split(",") : currentUser.followed_list;
-    console.log(myFollowed);
-    myTempArr = [];
-    for(let n=0;n<(myFollowed.length); n+=1){
-      myTempArr.push(+myFollowed[n])
-    };
-    console.log(myTempArr);
     let upDateUser = new User();
     upDateUser.id = currentUser?.id || 0;
     upDateUser.name = currentUser?.name||"";
@@ -206,35 +192,33 @@ function UserVacationList(): JSX.Element {
     upDateUser.user_name = currentUser?.user_name ||"";
     upDateUser.password = currentUser?.password ||"";
     console.log(currentUser?.followed_list);
-    upDateUser.followed_list = (currentUser?.followed_list.length >0? currentUser?.followed_list+",":"");
+    upDateUser.followed_list = (currentUser?.followed_list);
     console.log((upDateUser.followed_list));
     // upDateUser.followed_list = [...(upDateUser.followed_list)];
     // console.log(((upDateUser.followed_list).split("")[1]));
     console.log(myTempArr);
-    let temp = myTempArr.filter((number: any)=> number === item.id);
+    let temp = myTempArr.filter((number: any)=> number != item.id);
     console.log(temp);
     if(temp.length>0){
       console.log("exist");
       myTempArr = myTempArr.filter((number: any) => number!== item.id);
       console.log(myTempArr);
-      upDateUser.followed_list = "";
       for(let i=0; i<myTempArr.length; i+=1){
-        upDateUser.followed_list += myTempArr[i]+","}
-        // upDateUser.followed_list = upDateUser.followed_list.substring(0,upDateUser.followed_list.length-1)
+        upDateUser.followed_list = myTempArr[i]+","}
+        upDateUser.followed_list = upDateUser.followed_list.substring(0,upDateUser.followed_list.length-1)
         currentUser.followed_list = upDateUser.followed_list;
-        setUser(upDateUser);
       }else{
         console.log("not exist");
         myTempArr.push(item.id);
-        // myTempArr.length !== 1?upDateUser.followed_list = upDateUser.followed_list+"," + item.id:upDateUser.followed_list =item.id;
-        upDateUser.followed_list = upDateUser.followed_list + item.id+"," ;
+        myTempArr.length != 0?upDateUser.followed_list = upDateUser.followed_list+"," + item.id:upDateUser.followed_list =item.id;
         currentUser.followed_list = upDateUser.followed_list;
-        setUser(upDateUser);
       }
     
     // console.log((upDateUser.followed_list));
     console.log(currentUser);
-    axios.put(`http://localhost:3003/user/update`,currentUser)
+    setUser(upDateUser);
+    console.log(currentUser);
+    axios.put(`http://localhost:3003/user/update`,upDateUser)
     .then((response) => console.log(response.data[0]));
     console.log(item.isLiked);
     item.isLiked === false ? (item.isLiked = true) : (item.isLiked = false);
@@ -246,7 +230,7 @@ function UserVacationList(): JSX.Element {
     // const [isFollowed, setFolowed] = useState<boolean>(false);
 
     return (
-      <div>
+      <div onClick={async () =>await changeIcon(item)}>
         {myTempArr.includes(item.id) ? (
           <FavoriteIcon></FavoriteIcon>
         ) : (
