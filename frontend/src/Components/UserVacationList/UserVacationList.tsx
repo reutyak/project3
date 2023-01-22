@@ -22,6 +22,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import MenuUser from "../MenuUser/MenuUser";
 import Switch from '@mui/material/Switch';
+import { render } from "@testing-library/react";
 
 function UserVacationList(): JSX.Element {
   // var hash = require('object-hash');
@@ -203,6 +204,7 @@ function UserVacationList(): JSX.Element {
       </div>
     );
   }
+  
   const handleLikeClick=(card:forLikedPosts)=> {
     console.log(card);
     // card.isLiked = !card.isLiked
@@ -237,7 +239,7 @@ function UserVacationList(): JSX.Element {
                     store.dispatch(deleteVacationSt(updateVacation.id));
                     console.log(store.getState().vacationState.vacationsSt);
                     store.dispatch(addVacationSt(addProduct));
-                    console.log(store.getState().vacationState.vacationsSt);
+                    setVacations(store.getState().vacationState.vacationsSt);
                 })
                 axios.get(`http://localhost:3003/admin/vacation/all`)
                 .then(response=>{
@@ -282,7 +284,7 @@ function UserVacationList(): JSX.Element {
               <div
                 className="card-container"
                 key={item.id}
-                style={{ height: 360, width: 250 }}
+                style={{ height: 360, width: 250,display: checked?(currentUser.followed_list.includes(item.id) ? "block" : "none"):"block" }}
               >
                 <p>{item.destination}</p>
                 <p>{item.price}&#36;</p>
@@ -310,7 +312,7 @@ function UserVacationList(): JSX.Element {
                     {HeaderIcon(item)}
                   </IconButton>
                   {item.amountOfFollowers}
-                  {item.isLiked}
+                  {/* {item.isLiked} */}
                 </div>
               </div>
             ))}
