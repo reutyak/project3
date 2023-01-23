@@ -29,7 +29,7 @@ admin_router.post("/login", async (request: Request, response: Response, next: N
   console.log(admin);
   if(detailsAdmin.typeUser === "admin" && hash(detailsAdmin.user_name) === admin[0].admin_name && hash(detailsAdmin.password) === admin[0].admin_code){
   console.log(detailsAdmin.user_name);
-  console
+  // console
   const token = await getJWT(detailsAdmin.user_name,detailsAdmin.id);
   console.log(token);
   //add token to the system...

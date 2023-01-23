@@ -23,6 +23,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import MenuUser from "../MenuUser/MenuUser";
 import Switch from "@mui/material/Switch";
 import { render } from "@testing-library/react";
+import AddVacation from "../addVacation/addVacation";
+import ModalAuth from "../modalAuth/modalAuth";
 
 function UserVacationList(): JSX.Element {
   // var hash = require('object-hash');
@@ -31,6 +33,7 @@ function UserVacationList(): JSX.Element {
   axios.defaults.headers.common = { Authorization: myCurrentToken };
   const navigate = useNavigate();
   let myTempArr: Array<any> = [];
+  const [modalShow, setModalShow] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(10);
   const [currentUser, setUser] = useState<User>(new User());
@@ -64,15 +67,24 @@ function UserVacationList(): JSX.Element {
         // setVacations(store.getState().vacationReducer.vacations);
       });
     }
+    try{
     axios
       .get(`http://localhost:3003/user/single/${+myUserName}`)
       .then((response) => setUser(response.data[0]));
     // setLoading(false);
     console.log(User);
+  }catch(err: any) {
+    if(err.message=="Request failed with status code 401"){setModalShow(true)}
+    console.log(err.message);
+}
   }, [currentPage]);
 
   const pageCount = Math.ceil(vacations.length / 10);
-
+  const modalUp=()=>{
+    if(modalShow===true){
+            return <ModalAuth show={modalShow} onHide={() => {setModalShow(false);navigate("/")}} />
+    }     
+};
   const sortedVacations = vacations.sort(
     (objA, objB) =>
       new Date(objB.start_date).getTime() - new Date(objA.start_date).getTime()
@@ -90,7 +102,7 @@ function UserVacationList(): JSX.Element {
     setCurrentPage(value);
   };
 
-  const changeIcon = (item: Vacation) => {
+  const changeIcon = async (item: Vacation) => {
     currentUser.followed_list =
       currentUser?.followed_list.length > 0
         ? currentUser?.followed_list.substring(
@@ -144,10 +156,18 @@ function UserVacationList(): JSX.Element {
 
     // console.log((upDateUser.followed_list));
     console.log(currentUser);
-    axios
+    try{
+    await axios
       .put(`http://localhost:3003/user/update`, currentUser)
       .then((response) => console.log(response.data[0]))
       .then(() => handleLikeClick(item));
+      console.log("what to do");
+    }catch(err: any) {
+      console.log("catch");
+
+      if(err.message=="Request failed with status code 401"){setModalShow(true)}
+      console.log(err.message);
+  }
   };
 
   function HeaderIcon(item: Vacation) {
@@ -162,7 +182,7 @@ function UserVacationList(): JSX.Element {
     );
   }
 
-  const handleLikeClick = (card: Vacation) => {
+  const handleLikeClick = async (card: Vacation) => {
     console.log(card);
     let updateVacation = new Vacation();
     updateVacation.id = card.id;
@@ -177,7 +197,8 @@ function UserVacationList(): JSX.Element {
     )
       ? (card.amountOfFollowers += 1)
       : (card.amountOfFollowers -= 1);
-    axios
+      try{
+    await axios
       .put(`http://localhost:3003/admin/vacation/update`, updateVacation)
       .then((res) => {
         const addProduct = res.data;
@@ -188,7 +209,12 @@ function UserVacationList(): JSX.Element {
         console.log(store.getState().vacationState.vacationsSt);
         store.dispatch(addVacationSt(addProduct));
         setVacations(store.getState().vacationState.vacationsSt);
-      });
+      })}catch(err: any) {
+        console.log("catch");
+  
+        if(err.message=="Request failed with status code 401"){setModalShow(true)}
+        console.log(err.message);
+    };
     axios.get(`http://localhost:3003/admin/vacation/all`).then((response) => {
       store.dispatch(getAllVacationSt(response.data));
     });
@@ -199,6 +225,7 @@ function UserVacationList(): JSX.Element {
   return (
     <>
       <div className="UserVacationList">
+      <div>{modalUp()}</div>
         <Switch
           checked={checked}
           onChange={(args) => {
