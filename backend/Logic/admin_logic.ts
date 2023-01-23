@@ -108,7 +108,7 @@ const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
     vacation_img='${vacation.vacation_img}',
     start_date='${start_date_update}',
     end_date='${end_date_update}',
-    amountOfFollowers=${vacation.amountOfFollowers}
+    amountOfFollowers=${vacation.amountOfFollowers||0}
     WHERE id = ${vacation.id}
     `;
     await dal.execute(sql);

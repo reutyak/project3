@@ -83,7 +83,7 @@ function AddVacation(): JSX.Element {
             setAlert(true);
         }else{
             try{
-                console.log(newVacation.vacation_img)
+                console.log(newVacation.vacation_img[0])
                 console.log(await getBase64(newVacation.vacation_img[0]));
                 setFile(await getBase64(newVacation.vacation_img[0]));
                 newVacation.vacation_img = await getBase64(newVacation.vacation_img[0]);
@@ -178,12 +178,12 @@ function AddVacation(): JSX.Element {
                         <input type="number" defaultValue={vacation?.price} required {...register("price")} />
 
                         <label>vacation_img:</label>
-                        {vacation ? (<><p hidden><input type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")} /></p><button onClick={setPicFunc}>Update Picture</button></>) :
+                        {vacation ? (<><p hidden><input type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")} /></p><button type="button" onClick={setPicFunc}>Update Picture</button></>) :
                             <input type="file" {...register("vacation_img")} />}
+                        <p>{updatePic()}</p>
 
                         {/* <img style={{ height: 50, borderRadius: 20 }} src={vacation?.vacation_img} {...register("vacation_img")} /> */}
                         <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
-                        <p>{updatePic()}</p>
                     </form>
                 </div>
             </div>
