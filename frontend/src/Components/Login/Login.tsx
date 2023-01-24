@@ -70,19 +70,21 @@ const send =  async (userLogin: LoginModel) => {
                     //     console.log(userLogin.id)
 
                     // })
-                    axios.post("http://localhost:3003/user/login", userLogin)
+                    await axios.post("http://localhost:3003/user/login", userLogin)
                     .then(response=>{
+                        if (response.status===403){setAlert(true)}else{
                         console.log(response.headers["authorization"]);
                         const currentToken = response.headers["authorization"];
                         localStorage.setItem("myToken", currentToken||"");
                         localStorage.setItem("id",response.data);
                         console.log(response.data);
-                        response.data?navigate("/user"):navigate("/")});
+                        response.data?navigate("/user"):navigate("/");}})
                 }else{
                     setAlert(true);
                 }
         } catch (err: any) {
             console.log(err.message);
+            setAlert(true);
         }
     }
     return (

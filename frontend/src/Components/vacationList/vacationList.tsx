@@ -109,9 +109,10 @@ function VacationList(): JSX.Element {
                                             console.log(res.headers["authorization"]);
                                             const currentToken = res.headers["authorization"];
                                             localStorage.setItem("myToken", currentToken||"");
-                                            store.dispatch(deleteVacationSt(item.id));
+                                            // store.dispatch(deleteVacationSt(item.id));
                                         }
-                                    );
+                                    )
+                                    .then(res=>{store.dispatch(deleteVacationSt(item.id))})
                                     // setVacations(vacations.filter(singleVacation=>singleVacation.id !== item.id));
                                     // store.dispatch(deleteVacationSt(item.id));
                                 // }finally{

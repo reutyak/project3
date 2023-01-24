@@ -172,13 +172,13 @@ function UserVacationList(): JSX.Element {
 
   function HeaderIcon(item: Vacation) {
     return (
-      <div>
+      <><div>
         {currentUser.followed_list.includes(item.id) ? (
           <FavoriteIcon></FavoriteIcon>
         ) : (
           <FavoriteBorderIcon></FavoriteBorderIcon>
         )}
-      </div>
+      </div><span>{item.amountOfFollowers}</span></>
     );
   }
 
@@ -215,7 +215,8 @@ function UserVacationList(): JSX.Element {
         if(err.message=="Request failed with status code 401"){setModalShow(true)}
         console.log(err.message);
     };
-    axios.get(`http://localhost:3003/admin/vacation/all`).then((response) => {
+    
+    await axios.get(`http://localhost:3003/admin/vacation/all`).then((response) => {
       store.dispatch(getAllVacationSt(response.data));
     });
   };
@@ -275,7 +276,6 @@ function UserVacationList(): JSX.Element {
                   >
                     {HeaderIcon(item)}
                   </IconButton>
-                  {item.amountOfFollowers}
                 </div>
               </div>
             ))}
