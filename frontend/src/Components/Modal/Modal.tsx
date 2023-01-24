@@ -20,14 +20,13 @@ function Modal(): JSX.Element {
     }
     return (
         <div className="Modal">
-			<form onSubmit={handleSubmit(send)}>
-			<div className="Box">
+			<form className="login" onSubmit={handleSubmit(send)}>
+			<h4 className="head">System Boot</h4>
                 <label>Enter Admin Name</label>
-                <input type="text" required {...register("admin_name")}></input>
+                <input className="form-control" type="text" required {...register("admin_name")}></input>
                 <label>Enter Admin Password</label>
-                <input type="password" required {...register("admin_code")}></input>
-                <input required type="submit" value="Start"/>
-            </div>
+                <input className="form-control" type="password" required {...register("admin_code")}></input>
+                <input className="btn btn-primary" required type="submit" value="Start"/>
             </form>
         </div>
     );

@@ -4,8 +4,8 @@ import "./MenuUser.css";
 function MenuUser(): JSX.Element {
     return (
         <div className="MenuUser">
-			<nav className=" MenuAdmin navbar navbar-expand-lg navbar-light bg-light" id="exit">
-            <div><NavLink className="nav-link" to="/"><h4>Exit</h4></NavLink></div> 
+		<nav className="MenuUser navbar navbar-expand-lg navbar-light bg-light" id="exit">
+            <div><NavLink className="nav-link" to="/"><h6>Exit</h6></NavLink></div> 
         </nav>
         </div>
     );

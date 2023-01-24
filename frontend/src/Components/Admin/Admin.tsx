@@ -1,6 +1,6 @@
 import MenuAdmin from "../MenuAdmin/MenuAdmin";
 import VacationList from "../vacationList/vacationList";
-import "./Admin.css";
+
 
 function Admin(): JSX.Element {
     return (

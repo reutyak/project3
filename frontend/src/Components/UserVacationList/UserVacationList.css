@@ -9,6 +9,9 @@ html,body,#root{
     padding: 30px;
   
   }
+  .dest{
+    font-weight: 600;
+  }
   
   .Buttons{
     text-align: left;

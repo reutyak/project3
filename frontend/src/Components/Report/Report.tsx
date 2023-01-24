@@ -15,6 +15,7 @@ import {
   
   import { Bar } from 'react-chartjs-2';
 import { store } from "../redux/store";
+import { getAllVacationSt } from "../redux/vacationState";
   
   ChartJS.register(
     CategoryScale,
@@ -36,32 +37,31 @@ function Report(): JSX.Element {
         setVacations(store.getState().vacationState.vacationsSt);
         console.log("subscribe");
     });
-    // useEffect(()=>{
-    //     let storageVacation = JSON.parse(localStorage.vacations);
-    //     console.log(storageVacation.length);
-    //     if(storageVacation.length > 0)
-    //     {
-    //         setVacations(storageVacation);
-    //     }else{
-    //         axios.get(`http://localhost:3003/admin/vacation/all`)
-    //         .then(response=>setVacations(response.data));
-    //         console.log("123");
-    //         console.log(vacations);
-    //     }
-        // axios.get("http://localhost:3003/admin/vacation/all")
-        // .then(response=>setVacations(response.data));
-        
-    // },[])
+    useEffect(()=>{
+        if(vacations.length>0){console.log(vacations.length);}
+        else{
+            axios.get(`http://localhost:3003/admin/vacation/all`)
+            .then(response=>{
+                setVacations(response.data);
+                store.dispatch(getAllVacationSt(response.data));
+            });
+            
+            console.log("123");
+            console.log(vacations);
+
+        }
+                
+    },[])
     
     const names=new Array<string>();
     const followers=new Array<number>();
     
 
     vacations.map(item => {
-        if(item.amountOfFollowers>0)
+        if(item.amountOfFollowers>0){
             names.push(item.destination?item.destination:"");
             followers.push(item.amountOfFollowers);
-            
+        }    
     })
     console.log(names);
     console.log(followers);
@@ -84,10 +84,11 @@ function Report(): JSX.Element {
     return (
         <div className="Report">
             <header><MenuAdmin/></header>
-            <main><h2>Report</h2></main>
-            <Bar className="bar"  data={data} />
-            
-    </div>
+            <main><h3 className="head">Vacation Followers Report</h3></main>
+             <div className="bar">
+                <Bar   data={data} />
+             </div>
+        </div>
     
     );
 }

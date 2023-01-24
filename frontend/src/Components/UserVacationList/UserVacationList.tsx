@@ -227,6 +227,7 @@ function UserVacationList(): JSX.Element {
     <>
       <div className="UserVacationList">
       <div>{modalUp()}</div>
+      <MenuUser></MenuUser>
         <Switch
           checked={checked}
           onChange={(args) => {
@@ -234,6 +235,7 @@ function UserVacationList(): JSX.Element {
           }}
           inputProps={{ "aria-label": "controlled" }}
         />
+        
         <span>wishlist</span>
         <div className="displayCard">
           <div className="card">
@@ -251,7 +253,7 @@ function UserVacationList(): JSX.Element {
                     : "block",
                 }}
               >
-                <p>{item.destination}</p>
+                <p className="dest">{item.destination}</p>
                 <p>{item.price}&#36;</p>
                 <img
                   className="image"
@@ -287,7 +289,7 @@ function UserVacationList(): JSX.Element {
           onChange={handleChange}
         />
       </div>
-      <MenuUser></MenuUser>
+      
     </>
   );
 }

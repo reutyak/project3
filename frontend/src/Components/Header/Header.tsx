@@ -5,7 +5,7 @@ function Header(): JSX.Element {
         <div className="Header">
             {/* <TravelExploreIcon></TravelExploreIcon> */}
 			<h3 className="header">VACATION</h3>
-            <h4 className="second">The right place for your <span className="span">next</span> vacation...</h4>
+            <h6 className="second">The right place for your <span className="span">next</span> vacation...</h6>
         </div>
     );
 }

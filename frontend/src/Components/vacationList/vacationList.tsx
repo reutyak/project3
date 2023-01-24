@@ -96,7 +96,7 @@ function VacationList(): JSX.Element {
                 <div className="card">
                 {currentCards.map((item)=>
                     <div className="card-container" key={item.id} style={{ height: 360, width:250 }}>
-                        <p>{item.destination}</p>
+                        <p className="dest">{item.destination}</p>
                         <p>{item.price}&#36;</p>
                         <img className="image" src={item.vacation_img} style={{height:150}}/>
                         <p>{new Date(item.start_date).toISOString().slice(8,10)}/{new Date(item.start_date).toISOString().slice(5,7)}/{new Date(item.start_date).toISOString().slice(0,4)} - {new Date(item.end_date).toISOString().slice(8,10)}/{new Date(item.end_date).toISOString().slice(5,7)}/{new Date(item.end_date).toISOString().slice(0,4)}</p>

@@ -47,19 +47,19 @@ const send =  async (user: User) => {
     }
     return (
         <div className="Register">
-            <form onSubmit={handleSubmit(send)}>
-			<div className="Box">
-                <h2>Register</h2>
+            <form className="register" onSubmit={handleSubmit(send)}>
+			<div className="form">
+                <h4 className="head">Register</h4>
                 <div className = "Alert">{alertOn()}</div>
-                <label>Enter your first name</label>
-                <input type="text" required {...register("name")}></input>
-                <label>Enter your last name</label>
-                <input type="text" required {...register("last_name")}></input>
-                <label>Enter User Name</label>
-                <input type="text" required {...register("user_name")}></input>
-                <label>Enter Password</label>
-                <input type="password" required {...register("password")}></input>
-                <input required type="submit" value="Register"/>
+                <label>Enter your first name:</label>
+                <input className="form-control" type="text" required {...register("name")}></input>
+                <label>Enter your last name:</label>
+                <input className="form-control" type="text" required {...register("last_name")}></input>
+                <label>Enter User Name:</label>
+                <input className="form-control" type="text" required {...register("user_name")}></input>
+                <label>Enter Password:</label>
+                <input className="form-control" type="password" required {...register("password")}></input>
+                <input className="btn btn-primary" required type="submit" value="Register"/>
             </div>
             </form>
         </div>

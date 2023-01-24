@@ -39,7 +39,7 @@ function AddVacation(): JSX.Element {
     }
     const updatePic=()=>{
         if(pic===true){
-                return <input type="file" {...register("vacation_img")} />
+                return <input className="form-control" type="file" {...register("vacation_img")} />
         }     
     };
 
@@ -158,32 +158,32 @@ function AddVacation(): JSX.Element {
                 {/* <><Button variant="primary" onClick={() => setModalShow(true)}>
             Launch vertically centered modal
         </Button><ModalAuth show={modalShow} onHide={() => setModalShow(false)} /></> */}
-                <div className="Box">
-                    <form onSubmit={handleSubmit(send)}>
-                        <h2>Add Vacation!</h2>
+                <div >
+                    <form className="add" onSubmit={handleSubmit(send)}>
+                    <h4 className="head">{id===0?"Add Vacation:":"Update Vacation:"}</h4>
                         <div className="Alert">{alertOn()}</div>
-                        <label>destination:</label>
-                        <input type="text" defaultValue={vacation?.destination} required {...register("destination")} />
+                        <label>Destination:</label>
+                        <input className="form-control" type="text" defaultValue={vacation?.destination} required {...register("destination")} />
 
-                        <label>description:</label>
-                        <input type="text" defaultValue={vacation?.description} required {...register("description")} />
+                        <label>Description:</label>
+                        <input className="form-control" type="text" defaultValue={vacation?.description} required {...register("description")} />
 
-                        <label>start_date:</label>
-                        <input type="date" defaultValue={vacation ? (new Date(vacation?.start_date)).toISOString().slice(0, 10) : ""} required {...register("start_date")} />
+                        <label>Start date:</label>
+                        <input  className="form-control"type="date" defaultValue={vacation ? (new Date(vacation?.start_date)).toISOString().slice(0, 10) : ""} required {...register("start_date")} />
 
-                        <label>end_date:</label>
-                        <input type="date" defaultValue={vacation ? (new Date(vacation?.end_date)).toISOString().slice(0, 10) : ""} required {...register("end_date")} />
+                        <label>End date:</label>
+                        <input className="form-control" type="date" defaultValue={vacation ? (new Date(vacation?.end_date)).toISOString().slice(0, 10) : ""} required {...register("end_date")} />
 
-                        <label>price:</label>
-                        <input type="number" defaultValue={vacation?.price} required {...register("price")} />
+                        <label>Price:</label>
+                        <input className="form-control" type="number" defaultValue={vacation?.price} required {...register("price")} />
 
-                        <label>vacation_img:</label>
-                        {vacation ? (<><p hidden><input type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")} /></p><button type="button" onClick={setPicFunc}>Update Picture</button></>) :
-                            <input type="file" {...register("vacation_img")} />}
+                        <label>Relevance image:</label>
+                        {vacation ? (<><p hidden><input  className="form-control" type="text" defaultValue={vacation?.vacation_img} {...register("vacation_img")} /></p><button  className="btn btn-xs btn-link" type="button" onClick={setPicFunc}>Update Picture</button></>) :
+                            <input className="form-control" type="file" {...register("vacation_img")} />}
                         <p>{updatePic()}</p>
 
                         {/* <img style={{ height: 50, borderRadius: 20 }} src={vacation?.vacation_img} {...register("vacation_img")} /> */}
-                        <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
+                        <input className="btn btn-primary" type="submit" value="save vacation"  />
                     </form>
                 </div>
             </div>
