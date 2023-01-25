@@ -151,5 +151,22 @@ admin_router.put("/vacation/update", async (request: Request, response: Response
   }
 })
 
+// update vacation
+admin_router.put("/vacation/updateFollow", async (request: Request, response: Response, next: NextFunction) => {
+  const body = request.body;
+  if (request.headers.authorization &&  await checkJWT(request.headers.authorization)){
+    //create new JWT
+    const userName = getUserNameFromJWT(request.headers.authorization);
+    const userId=getUserIdFromJWT(request.headers.authorization);
+    console.log("my user name: ",userName);
+    console.log("my user id: ",userId);
+    response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
+    response.status(201).json( await admin_logic.updateVacationFollow(body));
+  }else{
+    response.status(401).json("You are no authorized!!!");
+
+  }
+})
+
 
 export default admin_router;

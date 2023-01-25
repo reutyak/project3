@@ -124,7 +124,7 @@ function AddVacation(): JSX.Element {
                     newVacation.vacation_img = newVacation.vacation_img;
                 }
                 await axios.put("http://localhost:3003/admin/vacation/update", newVacation)
-                .then(res=>{
+                .then(async res=>{
                     //update the localStorage
                     // storageVacation = storageVacation.filter((vacation: { id: number; })=> (vacation.id !== id));
                     // storageVacation.push(newVacation);
@@ -134,7 +134,7 @@ function AddVacation(): JSX.Element {
                     // store.dispatch(updateVacationSt(addProduct));
                     const currentToken = res.headers["authorization"];
                     localStorage.setItem("myToken", currentToken||"");
-                    store.dispatch(deleteVacationSt(id));
+                    await store.dispatch(deleteVacationSt(id));
                     console.log(store.getState().vacationState.vacationsSt);
                     store.dispatch(addVacationSt(addProduct));
                     console.log(store.getState().vacationState.vacationsSt);

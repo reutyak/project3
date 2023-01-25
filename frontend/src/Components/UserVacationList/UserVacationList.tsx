@@ -25,6 +25,7 @@ import Switch from "@mui/material/Switch";
 import { render } from "@testing-library/react";
 import AddVacation from "../addVacation/addVacation";
 import ModalAuth from "../modalAuth/modalAuth";
+import VacationFollow from "../../Models/vacationToUpdateFollow";
 
 function UserVacationList(): JSX.Element {
   // var hash = require('object-hash');
@@ -37,6 +38,7 @@ function UserVacationList(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(10);
   const [currentUser, setUser] = useState<User>(new User());
+  const [button,setButton] = useState<boolean>(false);
   const [vacations, setVacations] = useState<Vacation[]>(
     store.getState().vacationState.vacationsSt
   );
@@ -103,6 +105,7 @@ function UserVacationList(): JSX.Element {
   };
 
   const changeIcon = async (item: Vacation) => {
+    setButton(true);
     currentUser.followed_list =
       currentUser?.followed_list.length > 0
         ? currentUser?.followed_list.substring(
@@ -168,6 +171,7 @@ function UserVacationList(): JSX.Element {
       if(err.message=="Request failed with status code 401"){setModalShow(true)}
       console.log(err.message);
   }
+  setTimeout(()=>setButton(false), 1000)
   };
 
   function HeaderIcon(item: Vacation) {
@@ -182,16 +186,16 @@ function UserVacationList(): JSX.Element {
     );
   }
 
-  const handleLikeClick = async (card: Vacation) => {
+  const handleLikeClick = async (card: VacationFollow) => {
     console.log(card);
-    let updateVacation = new Vacation();
+    let updateVacation = new VacationFollow();
     updateVacation.id = card.id;
-    updateVacation.price = card.price;
-    updateVacation.destination = card.destination;
-    updateVacation.description = card.description;
-    updateVacation.start_date = card.start_date;
-    updateVacation.end_date = card.end_date;
-    updateVacation.vacation_img = card.vacation_img;
+    // updateVacation.price = card.price;
+    // updateVacation.destination = card.destination;
+    // updateVacation.description = card.description;
+    // updateVacation.start_date = card.start_date;
+    // updateVacation.end_date = card.end_date;
+    // updateVacation.vacation_img = card.vacation_img;
     updateVacation.amountOfFollowers = currentUser.followed_list.includes(
       card.id
     )
@@ -199,7 +203,7 @@ function UserVacationList(): JSX.Element {
       : (card.amountOfFollowers -= 1);
       try{
     await axios
-      .put(`http://localhost:3003/admin/vacation/update`, updateVacation)
+      .put(`http://localhost:3003/admin/vacation/updateFollow`, updateVacation)
       .then((res) => {
         const addProduct = res.data;
         console.log(store.getState().vacationState.vacationsSt);
@@ -222,12 +226,11 @@ function UserVacationList(): JSX.Element {
   };
 
   const [checked, setChecked] = useState(false);
-
+  
   return (
     <>
       <div className="UserVacationList">
       <div>{modalUp()}</div>
-      <MenuUser></MenuUser>
         <Switch
           checked={checked}
           onChange={(args) => {
@@ -235,8 +238,8 @@ function UserVacationList(): JSX.Element {
           }}
           inputProps={{ "aria-label": "controlled" }}
         />
-        
         <span>wishlist</span>
+        <MenuUser></MenuUser>
         <div className="displayCard">
           <div className="card">
             {currentCards.map((item) => (
@@ -253,7 +256,7 @@ function UserVacationList(): JSX.Element {
                     : "block",
                 }}
               >
-                <p className="dest">{item.destination}</p>
+                <p>{item.destination}</p>
                 <p>{item.price}&#36;</p>
                 <img
                   className="image"
@@ -261,10 +264,10 @@ function UserVacationList(): JSX.Element {
                   style={{ height: 150 }}
                 />
                 <p>
-                  {new Date(item.start_date).toISOString().slice(8, 10)}/
+                  {new Date(item.start_date).getDate()}/
                   {new Date(item.start_date).toISOString().slice(5, 7)}/
                   {new Date(item.start_date).toISOString().slice(0, 4)} -{" "}
-                  {new Date(item.end_date).toISOString().slice(8, 10)}/
+                  {new Date(item.end_date).getDate()}/
                   {new Date(item.end_date).toISOString().slice(5, 7)}/
                   {new Date(item.end_date).toISOString().slice(0, 4)}
                 </p>
@@ -274,6 +277,7 @@ function UserVacationList(): JSX.Element {
                     className="btn"
                     aria-label="edit"
                     color="success"
+                    disabled = {button}
                     onClick={() => changeIcon(item)}
                   >
                     {HeaderIcon(item)}
@@ -289,7 +293,6 @@ function UserVacationList(): JSX.Element {
           onChange={handleChange}
         />
       </div>
-      
     </>
   );
 }

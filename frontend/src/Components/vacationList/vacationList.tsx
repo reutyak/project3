@@ -99,7 +99,7 @@ function VacationList(): JSX.Element {
                         <p className="dest">{item.destination}</p>
                         <p>{item.price}&#36;</p>
                         <img className="image" src={item.vacation_img} style={{height:150}}/>
-                        <p>{new Date(item.start_date).toISOString().slice(8,10)}/{new Date(item.start_date).toISOString().slice(5,7)}/{new Date(item.start_date).toISOString().slice(0,4)} - {new Date(item.end_date).toISOString().slice(8,10)}/{new Date(item.end_date).toISOString().slice(5,7)}/{new Date(item.end_date).toISOString().slice(0,4)}</p>
+                        <p>{new Date(item.start_date).getDate()}/{new Date(item.start_date).toISOString().slice(5,7)}/{new Date(item.start_date).toISOString().slice(0,4)} - {new Date(item.end_date).getDate()}/{new Date(item.end_date).toISOString().slice(5,7)}/{new Date(item.end_date).toISOString().slice(0,4)}</p>
                         <p>{item.description}</p>
                         <div className="Buttons">
                         <IconButton className="btn" aria-label="delete"  color="error" size="large" onClick={async ()=>{

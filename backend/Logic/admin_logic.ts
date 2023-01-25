@@ -3,7 +3,8 @@
 import dal from "../Utils/dal_mysql" 
 import { OkPacket } from "mysql";
 import Admin from "../Models/Admin";
-import Vacation from "../Models/Vacation";
+import Vacation from "../Models/Vacation"
+import VacationFollow from "../Models/vacationToUpdateFollow";
 
 var hash = require('object-hash');
 
@@ -115,6 +116,18 @@ const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
     return vacation;
 }
 
+const updateVacationFollow = async (vacation: VacationFollow): Promise<VacationFollow> => {
+    
+    const sql = `
+    UPDATE vacation 
+    SET 
+    amountOfFollowers=${vacation.amountOfFollowers||0}
+    WHERE id = ${vacation.id}
+    `;
+    await dal.execute(sql);
+    return vacation;
+}
+
 
 export default {
     getAllAdmins,
@@ -126,6 +139,7 @@ export default {
     getSingleVacation,
     addVacation,
     deleteVacation,
-    updateVacation
+    updateVacation,
+    updateVacationFollow
 
 }
