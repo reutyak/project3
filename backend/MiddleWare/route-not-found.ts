@@ -1,4 +1,3 @@
-// importations
 import { Request, Response, NextFunction } from "express";
 import { RouteNotFoundError } from "../Models/client-errors"
 
@@ -12,5 +11,4 @@ const ErrorHandler = (
     next(err);
 }
 
-// exporting
 export default ErrorHandler;

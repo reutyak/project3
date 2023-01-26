@@ -1,19 +1,21 @@
 .AddVacation {
-	text-align: center;
+    text-align: center;
 }
-.add{
-    width:45%;
-    /* border: 2px solid rgb(164, 193, 222); */
+
+.add {
+    width: 45%;
     border-radius: 15px;
     margin-left: 27.5%;
-    padding:20px;
+    padding: 20px;
     background-color: white;
 }
-.AddVacation label,.AddVacation input{
+
+.AddVacation label, .AddVacation input {
     font-size: 15px;
     margin-bottom: 10px;
 }
-.head{
+
+.head {
     font-weight: 900;
     margin-bottom: 30px;
 }

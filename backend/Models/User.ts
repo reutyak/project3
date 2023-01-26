@@ -5,8 +5,6 @@ class User{
     user_name:string="";
     password:string="";
     followed_list:string="";
-    // followed_list2:number[]=[];
-
 }
 
 export default User;

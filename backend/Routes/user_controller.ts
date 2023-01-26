@@ -17,37 +17,51 @@ var hash = require("object-hash");
 user_router.get(
   "/all",
   async (request: Request, response: Response, next: NextFunction) => {
-    if (request.headers.authorization &&  await checkJWT(request.headers.authorization)){
+    if (
+      request.headers.authorization &&
+      (await checkJWT(request.headers.authorization))
+    ) {
       //create new JWT
-      const userName =await getUserNameFromJWT(request.headers.authorization);
-      const userId=getUserIdFromJWT(request.headers.authorization);
-      console.log("my user name: ",userName);
-      console.log("my user id: ",userId);
-      response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
-      //return the response 
-    response.status(200).json(await user_logic.getAllUsers());
-  }else {
-    response.status(401).json("You are no authorized!!!");
-}}
+      const userName = await getUserNameFromJWT(request.headers.authorization);
+      const userId = getUserIdFromJWT(request.headers.authorization);
+      console.log("my user name: ", userName);
+      console.log("my user id: ", userId);
+      response.set(
+        "Authorization",
+        `Bearer ${await getJWT(await userName, await userId)}`
+      );
+      //return the response
+      response.status(200).json(await user_logic.getAllUsers());
+    } else {
+      response.status(401).json("You are no authorized!!!");
+    }
+  }
 );
 
 user_router.get(
   "/single/:id",
   async (request: Request, response: Response, next: NextFunction) => {
-    if (request.headers.authorization &&  await checkJWT(request.headers.authorization)){
+    if (
+      request.headers.authorization &&
+      (await checkJWT(request.headers.authorization))
+    ) {
       //create new JWT
-      const userName =await getUserNameFromJWT(request.headers.authorization);
-      const userId=getUserIdFromJWT(request.headers.authorization);
-      console.log("my user name: ",userName);
-      console.log("my user id: ",userId);
-      response.set("Authorization",`Bearer ${await getJWT(await userName,await userId)}`);
-      //return the response 
-    const someData = +request.params.id;
-    response.status(200).json(await user_logic.getSingleUser(someData));
-  }else {
-    response.status(401).json("You are no authorized!!!");
-}
-});
+      const userName = await getUserNameFromJWT(request.headers.authorization);
+      const userId = getUserIdFromJWT(request.headers.authorization);
+      console.log("my user name: ", userName);
+      console.log("my user id: ", userId);
+      response.set(
+        "Authorization",
+        `Bearer ${await getJWT(await userName, await userId)}`
+      );
+      //return the response
+      const someData = +request.params.id;
+      response.status(200).json(await user_logic.getSingleUser(someData));
+    } else {
+      response.status(401).json("You are no authorized!!!");
+    }
+  }
+);
 
 // sends information to DB
 user_router.post(
@@ -57,15 +71,6 @@ user_router.post(
     response.status(201).json(await user_logic.addUser(someData));
   }
 );
-
-// delete information from DB
-// user_router.delete(
-//   "/:id",
-//   async (request: Request, response: Response, next: NextFunction) => {
-//     const someData = +request.params.id;
-//     response.status(204).json(await user_logic.deleteUser(someData));
-//   }
-// );
 
 // update information in DB
 user_router.put(
@@ -84,10 +89,11 @@ user_router.put(
         "Authorization",
         `Bearer ${await getJWT(await userName, await userId)}`
       );
-    response.status(201).json(await user_logic.updateUser(body));
-  } else {
-    response.status(401).json("You are no authorized!!!");
-  }}
+      response.status(201).json(await user_logic.updateUser(body));
+    } else {
+      response.status(401).json("You are no authorized!!!");
+    }
+  }
 );
 
 //get all vacations
@@ -131,12 +137,12 @@ user_router.get(
         "Authorization",
         `Bearer ${await getJWT(await userName, await userId)}`
       );
-    response.status(200).json(await user_logic.getSingleVacation(someData));
-  }else {
-    response.status(401).json("You are no authorized!!!");
-  }}
+      response.status(200).json(await user_logic.getSingleVacation(someData));
+    } else {
+      response.status(401).json("You are no authorized!!!");
+    }
+  }
 );
-
 
 user_router.post(
   "/login",

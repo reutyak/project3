@@ -10,7 +10,6 @@ import "./Login.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import { store } from "../redux/store";
-import { logOut } from "../redux/vacationState";
 
 
 
@@ -27,6 +26,7 @@ function Login(): JSX.Element {
             return <Alert variant="outlined" severity="error">One of the details you entered is incorrect</Alert>
         }
     };
+
     const usersMap = (user_name:string,password:string) => {
         let response = false;
         users.map((user: { user_name: string; password: string; }) => {if (hash(user_name)===user.user_name && hash(password)===user.password){response = true}
@@ -35,7 +35,6 @@ function Login(): JSX.Element {
     };
        
     useEffect(()=>{
-        // store.dispatch(logOut());
         localStorage.setItem('myToken', "");
         localStorage.setItem('id', "");
 
@@ -50,7 +49,6 @@ function Login(): JSX.Element {
 
 const send =  async (userLogin: LoginModel) => {
         try {
-                // if(userLogin.typeUser === "admin" && hash(userLogin.user_name) === admin[0].admin_name && hash(userLogin.password) === admin[0].admin_code){
                 if(userLogin.typeUser === "admin"){
                 axios.post("http://localhost:3003/admin/login", userLogin)
                     .then(response=>{
@@ -60,16 +58,8 @@ const send =  async (userLogin: LoginModel) => {
                         console.log(response.data);
                         response.data?navigate("/admin"):navigate("/");
                     })
-                }//&& usersMap(userLogin.user_name,userLogin.password)===true
+                }
                 if (userLogin.typeUser === "user" ){
-                    // users.map((item)=>{
-                    //     if(hash(userLogin.user_name)===item.user_name){
-                    //         userLogin.id=item.id;
-                    //         console.log(userLogin.id)
-                    //     }
-                    //     console.log(userLogin.id)
-
-                    // })
                     await axios.post("http://localhost:3003/user/login", userLogin)
                     .then(response=>{
                         if (response.status===403){setAlert(true)}else{

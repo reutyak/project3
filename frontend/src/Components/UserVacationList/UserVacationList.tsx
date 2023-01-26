@@ -15,20 +15,16 @@ import {
   addVacationSt,
   deleteVacationSt,
   getAllVacationSt,
-  vacationActionType,
 } from "../redux/vacationState";
 import User from "../../Models/User";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import MenuUser from "../MenuUser/MenuUser";
 import Switch from "@mui/material/Switch";
-import { render } from "@testing-library/react";
-import AddVacation from "../addVacation/addVacation";
 import ModalAuth from "../modalAuth/modalAuth";
 import VacationFollow from "../../Models/vacationToUpdateFollow";
 
 function UserVacationList(): JSX.Element {
-  // var hash = require('object-hash');
 
   const myCurrentToken = localStorage.getItem("myToken");
   axios.defaults.headers.common = { Authorization: myCurrentToken };
@@ -39,6 +35,7 @@ function UserVacationList(): JSX.Element {
   const [cardsPerPage] = useState(10);
   const [currentUser, setUser] = useState<User>(new User());
   const [button,setButton] = useState<boolean>(false);
+  const [renderMe,setRender]=useState<boolean>(false);
   const [vacations, setVacations] = useState<Vacation[]>(
     store.getState().vacationState.vacationsSt
   );
@@ -64,16 +61,15 @@ function UserVacationList(): JSX.Element {
     } else {
       console.log("000");
       axios.get(`http://localhost:3003/admin/vacation/all`).then((response) => {
-        // setVacations(response.data);
         store.dispatch(getAllVacationSt(response.data));
-        // setVacations(store.getState().vacationReducer.vacations);
+        console.log(response.data);
+        setVacations(response.data);
       });
     }
     try{
     axios
       .get(`http://localhost:3003/user/single/${+myUserName}`)
       .then((response) => setUser(response.data[0]));
-    // setLoading(false);
     console.log(User);
   }catch(err: any) {
     if(err.message=="Request failed with status code 401"){setModalShow(true)}
@@ -98,7 +94,6 @@ function UserVacationList(): JSX.Element {
 
   // Change page
   const paginate = (pageNumber: any) => setCurrentPage(pageNumber);
-  // console.log(cardsPerPage, movieCard.length, paginate);
 
   const handleChange = (event: any, value: any) => {
     setCurrentPage(value);
@@ -157,7 +152,6 @@ function UserVacationList(): JSX.Element {
       setUser(upDateUser);
     }
 
-    // console.log((upDateUser.followed_list));
     console.log(currentUser);
     try{
     await axios
@@ -171,10 +165,11 @@ function UserVacationList(): JSX.Element {
       if(err.message=="Request failed with status code 401"){setModalShow(true)}
       console.log(err.message);
   }
-  setTimeout(()=>setButton(false), 1000)
+  setTimeout(()=>setButton(false), 2000)
   };
 
-  function HeaderIcon(item: Vacation) {
+  const HeaderIcon = (item: Vacation)=> {
+    // setRender(!renderMe);
     return (
       <><div>
         {currentUser.followed_list.includes(item.id) ? (
@@ -190,12 +185,6 @@ function UserVacationList(): JSX.Element {
     console.log(card);
     let updateVacation = new VacationFollow();
     updateVacation.id = card.id;
-    // updateVacation.price = card.price;
-    // updateVacation.destination = card.destination;
-    // updateVacation.description = card.description;
-    // updateVacation.start_date = card.start_date;
-    // updateVacation.end_date = card.end_date;
-    // updateVacation.vacation_img = card.vacation_img;
     updateVacation.amountOfFollowers = currentUser.followed_list.includes(
       card.id
     )

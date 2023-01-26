@@ -3,6 +3,7 @@
 }
 
 .MenuUser > div {
+    color:rgb(24, 119, 242);
     display:block;
     display: -moz-inline-box;
     *display: inline; /* For IE7 */
