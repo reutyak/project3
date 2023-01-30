@@ -29,16 +29,19 @@ RUN npm i -g nodemon
 
 
 # Create an empty directory for the project files and set it as the Current directory
-WORKDIR /app
+WORKDIR /vacations/backend
 
 # copy local package.json & package-lock.json into /app
-COPY package*.json /app/
+COPY package*.json /vacations/backend
 
 # Install NPM dependencies & devDependencies
 RUN npm i
 
 # copy project local files (first dot) into /app
-COPY . /app
+COPY . /vacations/backend
+# EXPOSE 3003
+
 
 # Execute "npm run server" inside /app (workdir) when container starts:
 ENTRYPOINT npm run server
+
