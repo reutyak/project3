@@ -64,10 +64,11 @@ services:
       - "3316:3306"
     restart: always
     environment:
+      MYSQL_HOST: localhost
       MYSQL_ROOT_USERNAME: "root"
       MYSQL_ROOT_PASSWORD: "12345678"
       MYSQL_DATABASE: vacation_project3
-      # ACCEPT_EULA: "Y"
+      ACCEPT_EULA: "Y"
     volumes:
       - data:/data
     networks:
@@ -87,8 +88,14 @@ services:
       - vacation-network
     depends_on:
       - sql-server-db
+    links:
+      - sql-server-db
     environment:
-      - DATABASE_URL=http://localhost:3316
+      MYSQL_HOST_IP: sql-server-db
+
+    #       DATABASE_URL: mysql://root:12345678@db:3306/vacation_project3
+
+      # - DATABASE_URL=http://localhost:3316
   
   frontend:
     container_name: vacation_frontend
