@@ -39,7 +39,7 @@ RUN npm i
 
 # copy project local files (first dot) into /app
 COPY . /vacations/backend
-# EXPOSE 3003
+EXPOSE 3003
 
 
 # Execute "npm run server" inside /app (workdir) when container starts:

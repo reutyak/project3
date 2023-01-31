@@ -9,6 +9,7 @@ const connection = mysql.createPool({
   user: config.mySQLUser,
   password: config.mySQLPassword,
   database: config.mySQLdb,
+  port: config.mySQLport,
 });
 
 console.log("we are connected to the DB");

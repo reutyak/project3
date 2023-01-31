@@ -8,6 +8,7 @@ class Config {
     public mySQLPassword = "12345678";
     public mySQLdb = "vacation_project3";
     public JWT_SECRET_KEY = "project3WithToken";
+    public mySQLport = 3316;
 
 }
 
