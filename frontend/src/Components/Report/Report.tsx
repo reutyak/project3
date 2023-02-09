@@ -38,7 +38,7 @@ function Report(): JSX.Element {
     if (vacations.length > 0) {
       console.log(vacations.length);
     } else {
-      axios.get(`http://localhost:3003/admin/vacation/all`).then((response) => {
+      axios.get(`http://localhost:3004/admin/vacation/all`).then((response) => {
         setVacations(response.data);
         store.dispatch(getAllVacationSt(response.data));
       });

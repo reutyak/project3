@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import config from "./config";
+require("dotenv").config();
 
 const getJWT = (userName: string, userId: number) => {
   let data = {
@@ -9,7 +9,7 @@ const getJWT = (userName: string, userId: number) => {
     id: userId,
   };
 
-  return jwt.sign(data, config.JWT_SECRET_KEY);
+  return jwt.sign(data, process.env.JWT_SECRET_KEY);
 };
 
 const checkJWT = async (token: string): Promise<boolean> => {
@@ -19,7 +19,7 @@ const checkJWT = async (token: string): Promise<boolean> => {
     try {
       jwt.verify(
         trueToken,
-        config.JWT_SECRET_KEY,
+        process.env.JWT_SECRET_KEY,
         async (err: any, user: any) => {
           if (err) {
             resolve(false);

@@ -35,7 +35,7 @@ function VacationList(): JSX.Element {
             if(vacations.length>0){console.log(vacations.length)
             }else{
                 console.log("000");
-                axios.get(`http://localhost:3003/admin/vacation/all`)
+                axios.get(`http://localhost:3004/admin/vacation/all`)
                 .then(response=>{
                     store.dispatch(getAllVacationSt(response.data));
                 });
@@ -81,7 +81,7 @@ function VacationList(): JSX.Element {
                         <div className="Buttons">
                         <IconButton className="btn" aria-label="delete"  color="error" size="large" onClick={async ()=>{
                                 try{
-                                    await axios.delete(`http://localhost:3003/admin/vacation/${item.id}`).then(
+                                    await axios.delete(`http://localhost:3004/admin/vacation/${item.id}`).then(
                                         res=>{
                                             console.log(res.headers["authorization"]);
                                             const currentToken = res.headers["authorization"];

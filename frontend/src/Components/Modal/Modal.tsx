@@ -12,7 +12,7 @@ function Modal(): JSX.Element {
 
     const send =  async (newAdmin: Admin) => {
         try {
-                axios.post("http://localhost:3003/admin/",newAdmin)
+                axios.post("http://localhost:3004/admin/",newAdmin)
                 .then(res=>(navigate("/")))
         } catch (err: any) {
             console.log(err.message);

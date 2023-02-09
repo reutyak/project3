@@ -31,15 +31,15 @@ function Register(): JSX.Element {
         
 
     useEffect(()=>{
-        axios.get("http://localhost:3003/admin/all")
+        axios.get("http://localhost:3004/admin/all")
         .then(response => setAdmin(response.data))
-        axios.get("http://localhost:3003/user/all")
+        axios.get("http://localhost:3004/user/all")
         .then(response => setUsers(response.data))
     },[]);
 
 const send =  async (user: User) => {
         try {
-            usersMap(user.user_name)?(setAlert(true)):(axios.post("http://localhost:3003/user/",user)  
+            usersMap(user.user_name)?(setAlert(true)):(axios.post("http://localhost:3004/user/",user)  
             .then(res=>navigate("/")));
         } catch (err: any) {
             console.log(err.message);

@@ -1,15 +1,12 @@
-//DAL -> Data Abstract Layer
-//to to install mysql -> npm install mysql
-
+require("dotenv").config();
 import mysql from "mysql";
-import config from "./config";
 
 const connection = mysql.createPool({
-  host: config.mySQLhost,
-  user: config.mySQLUser,
-  password: config.mySQLPassword,
-  database: config.mySQLdb,
-  port: config.mySQLport,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: 3306,
 });
 
 console.log("we are connected to the DB");

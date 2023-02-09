@@ -41,16 +41,16 @@ function Login(): JSX.Element {
     },[]);
 
     useEffect(()=>{
-        axios.get("http://localhost:3003/admin/all")
+        axios.get("http://localhost:3004/admin/all")
         .then(response => response.data.length ===0?navigate("/modal"): setAdmin(response.data))
-        axios.get("http://localhost:3003/user/all")
+        axios.get("http://localhost:3004/user/all")
         .then(response => setUsers(response.data))
     },[]);
 
 const send =  async (userLogin: LoginModel) => {
         try {
                 if(userLogin.typeUser === "admin"){
-                axios.post("http://localhost:3003/admin/login", userLogin)
+                axios.post("http://localhost:3004/admin/login", userLogin)
                     .then(response=>{
                         console.log(response.headers["authorization"]);
                         const currentToken = response.headers["authorization"];
@@ -60,7 +60,7 @@ const send =  async (userLogin: LoginModel) => {
                     })
                 }
                 if (userLogin.typeUser === "user" ){
-                    await axios.post("http://localhost:3003/user/login", userLogin)
+                    await axios.post("http://localhost:3004/user/login", userLogin)
                     .then(response=>{
                         if (response.status===403){setAlert(true)}else{
                         console.log(response.headers["authorization"]);

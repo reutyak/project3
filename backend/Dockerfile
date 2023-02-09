@@ -35,12 +35,9 @@ WORKDIR /vacations/backend
 COPY package*.json /vacations/backend
 
 # Install NPM dependencies & devDependencies
-RUN npm i
-
+RUN npm install
 # copy project local files (first dot) into /app
 COPY . /vacations/backend
-EXPOSE 3003
-
 
 # Execute "npm run server" inside /app (workdir) when container starts:
 ENTRYPOINT npm run server

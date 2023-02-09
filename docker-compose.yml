@@ -1,100 +1,41 @@
-# version: '3.8'
+version: '3.8'
 
-# services:
-#   mysqldb:
-#     image: mysql:5.7
-#     restart: unless-stopped
-#     env_file: ./.env
-#     environment:
-#       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-#       - MYSQL_DATABASE=$MYSQLDB_DATABASE
-#     ports:
-#       # - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
-#       - 3307:3306
-#     volumes:
-#       - db:/var/lib/mysql
-#     networks:
-#       - backend
-  
-#   backend:
-#     depends_on:
-#       - mysqldb
-#     build: ./backend
-#     restart: unless-stopped
-#     env_file: ./.env
-#     ports:
-#       # - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-#       - 3003:3003
-#     environment:
-#       - DB_HOST=mysqldb
-#       - DB_USER=$MYSQLDB_USER
-#       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-#       - DB_NAME=$MYSQLDB_DATABASE
-#       - DB_PORT=$MYSQLDB_DOCKER_PORT
-#       # - DB_JWT=$JWT_SECRET_KEY
-#       - CLIENT_ORIGIN=$CLIENT_ORIGIN
-#     networks:
-#       - backend
-#       - frontend
-
-#   frontend:
-#     depends_on:
-#       - backend
-#     build:
-#       context: ./frontend
-#       args:
-#         - REACT_APP_API_BASE_URL=$CLIENT_API_BASE_URL
-#     ports:
-#       # - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
-#       - 3000:3000
-#     networks:
-#       - frontend  
-
-# volumes: 
-#   db:
-
-# networks:
-#   backend:
-#   frontend:
 services:
-  sql-server-db:
-    container_name: sql-server-db
-    image: mysql
-    ports:
-      - "3316:3306"
-    restart: always
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file: ./.env
     environment:
-      MYSQL_HOST: "localhost"
-      MYSQL_ROOT_USERNAME: "root"
-      MYSQL_ROOT_PASSWORD: "12345678"
-      MYSQL_DATABASE: vacation_project3
-      ACCEPT_EULA: "Y"
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
-      - data:/data
+      - db:/var/lib/mysql
     networks:
       - vacation-network
   
   backend:
-    container_name: vacation_backend
-    image: vacation_backend:1.0.0
-    build: 
-      context: backend
-      # target: production
-      dockerfile: Dockerfile
+    depends_on:
+      - mysqldb
+    build: ./backend
+    restart: unless-stopped
+    env_file: ./.env
     ports:
-      - 3003:3003
-    restart: always
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - DB_NAME=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+      - CLIENT_ORIGIN=$CLIENT_ORIGIN
     networks:
       - vacation-network
-    depends_on:
-      - sql-server-db
-    links:
-      - sql-server-db
-    environment:
-      MYSQL_HOST_IP: sql-server-db
-      DATABASE_PUBLIC_URL: sql-server-db
-  
-  
+
+
   frontend:
     container_name: vacation_frontend
     image: vacation_frontend:1.0.0
@@ -110,12 +51,10 @@ services:
     depends_on:
       - backend
 
-volumes:
-  data: {}
-
 networks:
   vacation-network:
-    driver: bridge
-  
+    driver: bridge  
 
+volumes: 
+  db:
 

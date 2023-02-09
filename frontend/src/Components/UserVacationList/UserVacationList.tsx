@@ -60,7 +60,7 @@ function UserVacationList(): JSX.Element {
       console.log(vacations.length);
     } else {
       console.log("000");
-      axios.get(`http://localhost:3003/admin/vacation/all`).then((response) => {
+      axios.get(`http://localhost:3004/admin/vacation/all`).then((response) => {
         store.dispatch(getAllVacationSt(response.data));
         console.log(response.data);
         setVacations(response.data);
@@ -68,7 +68,7 @@ function UserVacationList(): JSX.Element {
     }
     try{
     axios
-      .get(`http://localhost:3003/user/single/${+myUserName}`)
+      .get(`http://localhost:3004/user/single/${+myUserName}`)
       .then((response) => setUser(response.data[0]));
     console.log(User);
   }catch(err: any) {
@@ -155,7 +155,7 @@ function UserVacationList(): JSX.Element {
     console.log(currentUser);
     try{
     await axios
-      .put(`http://localhost:3003/user/update`, currentUser)
+      .put(`http://localhost:3004/user/update`, currentUser)
       .then((response) => console.log(response.data[0]))
       .then(() => handleLikeClick(item));
       console.log("what to do");
@@ -192,7 +192,7 @@ function UserVacationList(): JSX.Element {
       : (card.amountOfFollowers -= 1);
       try{
     await axios
-      .put(`http://localhost:3003/admin/vacation/updateFollow`, updateVacation)
+      .put(`http://localhost:3004/admin/vacation/updateFollow`, updateVacation)
       .then((res) => {
         const addProduct = res.data;
         console.log(store.getState().vacationState.vacationsSt);
@@ -209,7 +209,7 @@ function UserVacationList(): JSX.Element {
         console.log(err.message);
     };
     
-    await axios.get(`http://localhost:3003/admin/vacation/all`).then((response) => {
+    await axios.get(`http://localhost:3004/admin/vacation/all`).then((response) => {
       store.dispatch(getAllVacationSt(response.data));
     });
   };

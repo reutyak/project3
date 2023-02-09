@@ -103,7 +103,7 @@ function AddVacation(): JSX.Element {
       try {
         if (id === 0) {
           await axios
-            .post("http://localhost:3003/admin/vacation/", newVacation)
+            .post("http://localhost:3004/admin/vacation/", newVacation)
             .then((res) => {
               console.log(res.data);
               const currentToken = res.headers["authorization"];
@@ -131,7 +131,7 @@ function AddVacation(): JSX.Element {
             newVacation.vacation_img = newVacation.vacation_img;
           }
           await axios
-            .put("http://localhost:3003/admin/vacation/update", newVacation)
+            .put("http://localhost:3004/admin/vacation/update", newVacation)
             .then(async (res) => {
               const addProduct = res.data;
               const currentToken = res.headers["authorization"];
